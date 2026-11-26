@@ -2558,6 +2558,61 @@
         #reading .reading-scroll { width: 100%; }
       }
     </style>
+    <style>
+      /* ================= THE BIBLE, GIVEN THE WHOLE SCREEN ================= */
+      /* The Reading uses every bit of the screen it has. The plate's padding,
+         the wide-screen plate padding, the stage's frame, and the inner
+         padding are all taken away on this page alone: the book rail, the
+         Bible text, and the folder-tab side menu together run edge to edge
+         across the full viewport width, and the stage fills the full height
+         beneath the top bar, with the chapter scrolling inside its pane.
+         The e-Sword order stands exactly as it was — rail at the left, text
+         in the midst, tabs at the right — only the dead space around it goes.
+         No other page is touched. */
+      body[data-page="reading"] main { max-width: none; width: 100%; }
+      #reading.plate { padding: 0 !important; width: 100%; max-width: none; }
+      #reading .reading-stage {
+        flex: 1 1 auto; min-height: 0; width: 100%;
+        border: none; outline: none;
+      }
+      #reading .reading-inner { padding: 0; gap: 0.35rem; width: 100%; max-width: none; }
+      #reading .es-layout { gap: 0.35rem; width: 100%; }
+      #reading .es-main { gap: 0.35rem; }
+      #reading .es-rail, #reading .es-side { outline: none; }
+      #reading .es-center .reading-scroll { width: 100%; max-width: none; outline: none; }
+      #reading .passage { width: 100%; max-width: none; }
+      body[data-page="reading"] .verse-bar-inner { max-width: none; width: 100%; margin: 0; }
+      @media (max-width: 900px) {
+        #reading .reading-inner { padding: 0; gap: 0.3rem; }
+        #reading .es-portion, #reading .es-toolbar { border-left: none; border-right: none; }
+        #reading .es-center .reading-scroll { border-left: none; border-right: none; }
+      }
+
+      /* ================= THE TALLY : A CLEAR WAY BACK ================= */
+      /* The Tally stands as a fixed sheet over the Forge and covers the very
+         button that opened it, so its Return stands inside it: one pinned
+         at its head, beside the title, that stays in reach while the days
+         scroll beneath, and one at its foot. The Reminders sheet's Shut is
+         pinned at its foot the same way, so no length of list hides it. */
+      .tally-head {
+        position: sticky; top: -0.7rem; z-index: 3;
+        display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap;
+        background: #fbf6e6; border-bottom: 3px double #8a6f3c;
+        margin: -0.7rem -0.9rem 0.6rem; padding: 0.55rem 0.9rem 0.5rem;
+      }
+      .tally-head h3 { text-align: left; margin: 0; }
+      .tally-head .btn, .tally-return-row .btn { min-height: 2.6rem; white-space: nowrap; }
+      .tally-return-row { text-align: center; margin-top: 0.9rem; }
+      .reminders-close-row {
+        position: sticky; bottom: -0.7rem; z-index: 3;
+        background: #fbf6e6; border-top: 3px double #8a6f3c;
+        margin: 0.9rem -0.9rem -0.7rem; padding: 0.55rem 0.9rem 0.6rem;
+      }
+      .scroll-note .note-shut-row { text-align: right; margin-top: 0.45rem; }
+      @media print {
+        .tally-head, .tally-return-row { display: none !important; }
+      }
+    </style>
   </head>
   <body class="splash-open" data-page="home">
 
@@ -2744,6 +2799,7 @@
             <div class="scroll-note" id="scrollNote">
               <label for="noteText" id="noteLabel">Thy Scroll &mdash; notes on to-day&rsquo;s reading</label>
               <textarea id="noteText" placeholder="Write plainly. What did the King say to thee?"></textarea>
+              <div class="note-shut-row"><button type="button" class="btn plain" id="noteShut">Put Down the Quill</button></div>
             </div>
           </div>
         </div>
@@ -2817,13 +2873,17 @@
 
             <div class="tally-wrap" id="tallyWrap">
               <div class="tally-sheet" id="tallySheet">
-                <h3 id="tallyTitle">The Tally</h3>
+                <div class="tally-head">
+                  <h3 id="tallyTitle">The Tally</h3>
+                  <button type="button" class="btn" id="tallyShutTop">&larr; Return to Bible Plans</button>
+                </div>
                 <p class="t-sub" id="tallySub"></p>
                 <table class="tally">
                   <thead><tr><th>Day</th><th>The Portion</th><th>Read</th></tr></thead>
                   <tbody id="tallyBody"></tbody>
                 </table>
                 <p class="t-sub tally-keep-note" style="margin-top:0.8rem;">To keep this Tally as a file, use thy browser&rsquo;s Print and choose Save as PDF &mdash; what prints is this Tally alone, every day of the plan.</p>
+                <div class="tally-return-row"><button type="button" class="btn" id="tallyShut">&larr; Return to Bible Plans</button></div>
               </div>
             </div>
 
@@ -4973,6 +5033,39 @@
           var w = $("tallyWrap"), open = w.classList.toggle("open");
           $("tallyBtn").setAttribute("aria-expanded", String(open));
           if (open) { $("remindersWrap").classList.remove("open"); $("remListBtn").setAttribute("aria-expanded", "false"); }
+        });
+        /* The way back out of the Tally. The Tally stands as a fixed sheet
+           over the Forge and covers the very button that opened it, so
+           without a Return of its own the reader was stuck. Its Return —
+           at its head, pinned while the days scroll, and at its foot —
+           shuts the Tally and puts the reader straight back in the Bible
+           Plans panel, where he was. Escape does the same, and shuts the
+           Reminders sheet on its own layer before the Forge beneath. */
+        function closeTally() {
+          var w = $("tallyWrap"); if (!w) return;
+          w.classList.remove("open");
+          $("tallyBtn").setAttribute("aria-expanded", "false");
+          $("tallyBtn").focus();
+        }
+        ["tallyShutTop", "tallyShut"].forEach(function (id) {
+          var b = $(id); if (b) b.addEventListener("click", closeTally);
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key !== "Escape") return;
+          if ($("tallyWrap").classList.contains("open")) { closeTally(); return; }
+          if ($("remindersWrap").classList.contains("open")) {
+            $("remindersWrap").classList.remove("open");
+            $("remListBtn").setAttribute("aria-expanded", "false");
+          }
+        });
+        /* The Quill's note likewise carries its own way down: the note
+           overlays the foot of the Reading, so "Put Down the Quill"
+           stands inside it, beside the toggle that raised it. */
+        var noteShutBtn = $("noteShut");
+        if (noteShutBtn) noteShutBtn.addEventListener("click", function () {
+          $("scrollNote").classList.remove("open");
+          $("quillBtn").setAttribute("aria-expanded", "false");
+          $("quillBtn").focus();
         });
         /* Keeping the Tally as a file: the app frame cannot raise the print
            sheet itself, so the way is written at the foot of the Tally —
