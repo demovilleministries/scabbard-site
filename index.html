@@ -2463,6 +2463,10 @@
       .es-panel[hidden] { display: none; }
       /* Bible search, in the left rail above the book scroll */
       .es-search-meta { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.88rem; margin-top: 0.3rem; min-height: 1.1em; }
+      /* The Bible Dictionary, in the left rail beside the search: Easton's,
+         public domain, opens at the Christian Classics Ethereal Library. */
+      .es-dict-link { display: block; text-align: center; margin-top: 0.3rem; }
+      .es-dict-note { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.88rem; margin-top: 0.3rem; }
       .es-results { display: grid; gap: 0.25rem; margin-top: 0.3rem; }
       .es-results:empty { margin-top: 0; }
       .es-result {
@@ -2641,6 +2645,9 @@
                 <input type="search" id="textSearch" placeholder="Search the Scriptures&hellip;" aria-label="Search the Bible text" />
                 <div class="es-search-meta" id="searchMeta" aria-live="polite"></div>
                 <div class="es-results" id="searchResults"></div>
+                <h4>The Bible Dictionary</h4>
+                <a class="btn plain es-dict-link" href="https://ccel.org/ccel/easton/ebd2.html" target="_blank" rel="noopener noreferrer">Easton&rsquo;s Bible Dictionary</a>
+                <p class="es-dict-note">Easton&rsquo;s Bible Dictionary, 1897 &mdash; public domain, at the Christian Classics Ethereal Library. Opens in a new window.</p>
                 <h4>The Books of the Bible</h4>
                 <input type="search" id="railSearch" placeholder="Find a book&hellip;" aria-label="Find a book" />
                 <h4>The Old Testament</h4>
