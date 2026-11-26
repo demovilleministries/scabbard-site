@@ -2214,7 +2214,7 @@
       }
     </style>
     <style>
-      /* ================= THE OPENING : full-screen logo reel ================= */
+      /* ================= THE OPENING : full-screen logo animation ================= */
       body.splash-open { overflow: hidden; }
       #splash {
         position: fixed; inset: 0; z-index: 200; cursor: pointer;
@@ -2224,15 +2224,39 @@
       }
       #splash.lift { opacity: 0; transform: scale(1.05); pointer-events: none; }
       .splash-stage { position: relative; width: min(72vmin, 520px); height: min(72vmin, 520px); }
-      .splash-logo { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px; }
-      .splash-reel {
-        position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      /* The animation is the approved logo itself, unchanged: the sword-S
+         draws in from the hilt down, then one gleam of light crosses the
+         blade. No other sword, no other imagery — the logo file alone. */
+      .splash-logo {
+        position: absolute; inset: 0; width: 100%; height: 100%;
         border: 1px solid var(--gold); border-radius: 12px; background: #0e1119;
         box-shadow: 0 18px 50px rgba(0,0,0,0.6);
+        animation: splashDraw 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s both;
       }
-      .splash-word { color: var(--parchment-light); font-size: clamp(2.2rem, 7vmin, 3.4rem); line-height: 1; }
-      .splash-hint { font-family: "IM Fell English", serif; font-style: italic; color: #d9c9a3; font-size: 1rem; }
-      @media (prefers-reduced-motion: reduce) { #splash { transition: none; } }
+      @keyframes splashDraw {
+        0% { clip-path: inset(0 0 100% 0 round 12px); opacity: 0.35; }
+        55% { opacity: 1; }
+        100% { clip-path: inset(0 0 0% 0 round 12px); opacity: 1; }
+      }
+      .splash-gleam { position: absolute; inset: 0; border-radius: 12px; overflow: hidden; pointer-events: none; }
+      .splash-gleam::before {
+        content: ""; position: absolute; top: -25%; bottom: -25%; left: 0; width: 42%;
+        background: linear-gradient(100deg, rgba(255,244,214,0) 0%, rgba(255,244,214,0.42) 50%, rgba(255,244,214,0) 100%);
+        mix-blend-mode: screen;
+        transform: translateX(-130%) skewX(-18deg);
+        animation: splashGleam 1.15s ease-in-out 1.45s both;
+      }
+      @keyframes splashGleam {
+        from { transform: translateX(-130%) skewX(-18deg); }
+        to { transform: translateX(330%) skewX(-18deg); }
+      }
+      .splash-word { color: var(--parchment-light); font-size: clamp(2.2rem, 7vmin, 3.4rem); line-height: 1; animation: splashWord 0.9s ease 1.55s both; }
+      @keyframes splashWord { from { opacity: 0; transform: translateY(0.4rem); } to { opacity: 1; transform: none; } }
+      @media (prefers-reduced-motion: reduce) {
+        #splash { transition: none; }
+        .splash-logo, .splash-word { animation: none; }
+        .splash-gleam { display: none; }
+      }
 
       /* ================= THE TOP BAR : logo, then the six doors ================= */
       .topbar {
@@ -2252,6 +2276,7 @@
         padding: 0.4rem 0.8rem; min-height: 3rem; border-left: 1px solid #6d4a2f;
       }
       .topnav a:first-child { border-left: none; }
+      .topnav a[hidden] { display: none; }
       .topnav a[aria-current="true"] { color: var(--gold-bright); box-shadow: inset 0 -3px 0 var(--gold-bright); }
       @media (hover: hover) { .topnav a:hover, .brand:hover .brand-word { color: var(--gold-bright); } }
       @media (max-width: 899px) {
@@ -2273,10 +2298,6 @@
       .home-card h3 { font-family: "IM Fell English SC", serif; font-weight: 400; color: var(--burgundy); font-size: 1.2rem; }
       .home-card p { font-family: "IM Fell English", serif; font-size: 1rem; line-height: 1.45; flex: 1; }
       .home-card .btn { align-self: flex-start; }
-      .home-today { border: 1px solid var(--gold); background: var(--burgundy-deep); color: var(--parchment); padding: 0.8rem 0.95rem; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-      .home-today .t-label { font-family: "IM Fell English SC", serif; color: var(--gold-bright); font-size: 0.9rem; letter-spacing: 0.06em; }
-      .home-today .t-portion { font-family: "IM Fell English", serif; font-size: 1.12rem; }
-
       /* ================= NOTES / GUESTBOOK lists ================= */
       .notes-tools { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
       .notes-tools input[type="search"] {
@@ -2320,17 +2341,16 @@
       /* ================= NAVIGATION : THE TOP BAR ALONE ================= */
       /* The old navigation is gone entire: no bottom dock, no Summon
          button, no Whole Roll sheet, no page-turn at the foot. The top
-         bar — Home, Bible Reading, Notes, Study Series, Contact, Donate —
+         bar — Home, Bible, Notes, Study Series, Contact, Donate —
          is the only navigation in the app, and it stands on every page,
-         the Reading included. Home is the dashboard: to-day's portion and
-         thy standing stand there, with a door to every part of the app,
+         the Reading included. Home is the dashboard: thy standing stands
+         there, with a door to every part of the app,
          Fellow Soldier and Settings among them. The Muster Roll and the
          Forge stand as pages no more: the Roll's reckoning lives on Home,
          and the Forge rises as a sheet within Bible Reading itself. */
 
-      /* Home, the dashboard: thy standing under to-day's portion */
+      /* Home, the dashboard: thy standing */
       .home-standing { margin-top: 0.9rem; }
-      .home-today .t-portion .ref { color: var(--gold-bright); }
 
       /* The Forge, within Bible Reading: a sheet that rises over the chapter */
       .forge-wrap {
@@ -2364,11 +2384,25 @@
       /* Bible Reading on desktop mirrors e-Sword's shape in Scabbard's own
          gatehouse dress: the full book list with its chapters down the left,
          the Scabbard top bar still at the top, the KJV text verse by verse
-         as the main centre pane, and a side bench holding to-day's portion,
-         thy plan, thy highlights, and a note on the verses in hand. On a
+         as the main centre pane, to-day's portion at the head of the page,
+         and a side bench holding thy plan, thy highlights, and a note on
+         the verses in hand. On a
          phone the rail and the bench fold away and the reading stands
          full-bleed, verse by verse, with nothing sideways. */
       #reading .es-inner { gap: 0.5rem; }
+      /* To-day's portion, once, at the head of the Reading page: from the
+         reader's plan, with the plan named — or, with no plan taken up, a
+         prompt to make one, opening the Bible Plans hover. */
+      .es-portion {
+        flex: none; display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap;
+        background: var(--burgundy-deep); color: var(--parchment);
+        border: 1px solid var(--gold); padding: 0.55rem 0.75rem;
+      }
+      .es-portion-main { flex: 1 1 15rem; min-width: 0; font-family: "IM Fell English", serif; font-size: 1.06rem; line-height: 1.4; }
+      .es-portion-label { display: block; font-family: "IM Fell English SC", serif; color: var(--gold-bright); font-size: 0.85rem; letter-spacing: 0.06em; }
+      .es-portion-main .ref { color: var(--gold-bright); }
+      .es-portion .btn { flex: none; }
+      .es-portion .btn[hidden] { display: none; }
       .es-toolbar {
         flex: none; display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;
         background: rgba(21,13,6,0.72); border: 1px solid var(--gold); padding: 0.4rem 0.55rem;
@@ -2377,7 +2411,10 @@
       .es-loc small { display: block; font-family: "IM Fell English", serif; font-style: italic; color: #d9c9a3; font-size: 0.82rem; }
       .es-toolbar .btn { min-height: 2.3rem; padding: 0.3rem 0.75rem; font-size: 0.92rem; white-space: nowrap; }
       .es-books-btn { display: none !important; }
-      .es-layout { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 248px minmax(0,1fr) 292px; gap: 0.55rem; }
+      /* The Bible itself takes the left three quarters — book rail and text
+         together — and the right quarter is a menu of folder tabs. */
+      .es-layout { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0,3fr) minmax(0,1fr); gap: 0.55rem; }
+      .es-main { display: grid; grid-template-columns: 248px minmax(0,1fr); gap: 0.55rem; min-width: 0; min-height: 0; }
       .es-center { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
       #reading .es-center .reading-controls { display: flex; }
       #reading .es-center .reading-foot { display: flex; }
@@ -2412,6 +2449,28 @@
       .es-side .ref { color: var(--burgundy); }
       .es-side-card { border-top: 1px dotted #8a6f3c; padding-top: 0.5rem; margin-top: 0.6rem; }
       .es-side-card:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+      /* The right quarter: a menu of folder tabs — Bible Plans, Notes,
+         Highlights — one folder open at a time. */
+      .es-tabs { display: flex; gap: 0.25rem; }
+      .es-tab {
+        flex: 1 1 0; min-width: 0; cursor: pointer; min-height: 2.5rem;
+        font-family: "IM Fell English SC", serif; font-size: 0.84rem; line-height: 1.15; color: var(--ink-soft);
+        background: rgba(122,90,40,0.20); border: 1px solid #8a6f3c; border-bottom: none;
+        border-radius: 7px 7px 0 0; padding: 0.45rem 0.2rem 0.4rem;
+      }
+      .es-tab[aria-selected="true"] { background: rgba(255,252,240,0.55); color: var(--burgundy); box-shadow: inset 0 3px 0 var(--gold); }
+      .es-side .es-panel { border-top: 1px solid #8a6f3c; margin-top: 0; padding-top: 0.6rem; }
+      .es-panel[hidden] { display: none; }
+      /* Bible search, in the left rail above the book scroll */
+      .es-search-meta { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.88rem; margin-top: 0.3rem; min-height: 1.1em; }
+      .es-results { display: grid; gap: 0.25rem; margin-top: 0.3rem; }
+      .es-results:empty { margin-top: 0; }
+      .es-result {
+        cursor: pointer; text-align: left; width: 100%;
+        background: rgba(255,252,240,0.45); border: 1px solid #b49b5e; color: var(--ink);
+        font-family: "IM Fell English", serif; font-size: 0.88rem; line-height: 1.35; padding: 0.35rem 0.5rem;
+      }
+      .es-result-ref { display: block; font-family: "IM Fell English SC", serif; color: var(--burgundy); font-size: 0.85rem; }
       .es-side .btn { margin-top: 0.45rem; }
       .es-hl-list { display: grid; gap: 0.3rem; }
       .es-hl-item { display: flex; align-items: center; gap: 0.45rem; font-family: "IM Fell English", serif; font-size: 0.9rem; }
@@ -2461,9 +2520,10 @@
       .pub-badge { display: inline-block; font-family: "IM Fell English SC", serif; font-size: 0.78rem; letter-spacing: 0.06em; color: var(--forest-deep); border: 1px solid var(--forest); padding: 0.05rem 0.45rem; margin-left: 0.5rem; }
       .stars-shown { color: var(--gold); font-size: 1.05rem; letter-spacing: 0.15em; }
       /* Phone: the rail and the bench fold away; the reading is full-bleed */
-      @media (max-width: 1100px) { .es-layout { grid-template-columns: 218px minmax(0,1fr) 252px; } }
+      @media (max-width: 1100px) { .es-main { grid-template-columns: 218px minmax(0,1fr); } }
       @media (max-width: 900px) {
         .es-layout { grid-template-columns: minmax(0,1fr); }
+        .es-main { grid-template-columns: minmax(0,1fr); }
         .es-side { display: none; }
         .es-books-btn { display: inline-flex !important; }
         .es-rail {
@@ -2478,17 +2538,17 @@
   </head>
   <body class="splash-open">
 
-    <!-- ============ THE OPENING : the logo reel, full screen, on every open ============ -->
+    <!-- ============ THE OPENING : the logo, animated, full screen, on every open ============ -->
     <!-- The first thing seen as Scabbard loads, new or returning: the approved
-         logo reel, full screen. Then it lifts — Scabbard opens free to
-         everyone, with no sign-up at the door. -->
+         logo itself, full screen — the sword-S draws in and one gleam crosses
+         the blade. No video, and no sword but the logo's own. Then it lifts —
+         Scabbard opens free to everyone, with no sign-up at the door. -->
     <div id="splash" role="presentation" aria-hidden="true">
       <div class="splash-stage">
         <img class="splash-logo" src="data:image/webp;base64,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" alt="" width="480" height="480" />
-        <video class="splash-reel" id="splashReel" src="scabbard-reel-v3.mp4" autoplay muted playsinline preload="auto" tabindex="-1"></video>
+        <div class="splash-gleam" aria-hidden="true"></div>
       </div>
       <div class="splash-word blackletter">Scabbard</div>
-      <p class="splash-hint">Tap to enter</p>
     </div>
 
 
@@ -2499,12 +2559,12 @@
       </a>
       <nav class="topnav" aria-label="Scabbard">
         <a href="#home">Home</a>
-        <a href="#reading">Bible Reading</a>
+        <a href="#reading">Bible</a>
         <a href="#notes">Notes</a>
         <a href="#study">Study Series</a>
         <a href="#contact">Contact</a>
         <a href="#donate">Donate</a>
-        <a href="#admin">Administrator</a>
+        <a href="#admin" id="adminNav" hidden>Administrator</a>
       </nav>
     </header>
 
@@ -2512,8 +2572,6 @@
       <!-- ============ HOME ============ -->
       <section class="plate" id="home">
         <div class="plate-head">
-          <div class="numeral">HOME</div>
-          <h2>Home</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>&ldquo;Thy word is a lamp unto my feet, and a light unto my path.&rdquo; &mdash; Psalm 119:105</p>
         </div>
@@ -2525,10 +2583,6 @@
           <p class="home-lede">Scabbard is a Bible reading app — the King James Bible, verse by verse, in one focused scroll. Forge thine own reading plan or take up a ready-made one, read a portion every day, seal the verses that strike thee, and keep thy notes as thou goest.</p>
           <p class="home-lede">Beyond the daily reading stand the Study Series — training such as the Kingdom Series, nine levels in the Armour of Light — for any reader who wants to go further.</p>
           <p class="home-open-line">Scabbard is open to everyone, free — no sign-up to read, plan, or take notes. The only sign-up in Scabbard is joining the Kingdom Series.</p>
-          <div class="home-today">
-            <div><div class="t-label">TO-DAY&rsquo;S PORTION</div><div class="t-portion" id="rollPortion">To-day&rsquo;s portion is reckoned from thy plan.</div></div>
-            <a class="btn" href="#reading">Read To-day&rsquo;s Portion &rarr;</a>
-          </div>
           <div class="home-standing">
             <div class="progress-frame"><div class="progress-fill" id="rollProgress" role="img" aria-label="0 of 365 days read" style="width:0%"></div></div>
             <div class="progress-label"><span id="rollDayLabel">Day 1</span><span id="rollRemainLabel"></span></div>
@@ -2557,7 +2611,6 @@
       <section class="plate" id="reading">
         <div class="plate-head">
           <div class="numeral">PLATE III</div>
-          <h2>The Reading</h2>
           <div class="rule" aria-hidden="true">❦</div>
         </div>
         <div class="reading-stage">
@@ -2565,6 +2618,14 @@
             <div class="flame f1"></div><div class="flame f2"></div><div class="flame f3"></div><div class="flame f4"></div><div class="flame f5"></div>
           </div>
           <div class="reading-inner es-inner">
+            <div class="es-portion" id="readingPortion">
+              <div class="es-portion-main">
+                <span class="es-portion-label">TO-DAY&rsquo;S PORTION</span>
+                <span class="es-portion-body" id="readingPortionBody">No plan is taken up yet. Make a plan, and to-day&rsquo;s portion will stand here, at the head of thy Reading.</span>
+              </div>
+              <button type="button" class="btn" id="readingPortionRead" hidden>Read To-day&rsquo;s Portion</button>
+              <button type="button" class="btn" id="readingPortionMake">Make a Plan</button>
+            </div>
             <div class="es-toolbar" role="group" aria-label="Reading tools">
               <button type="button" class="btn es-books-btn" id="booksToggle" aria-expanded="false" aria-controls="bookRail">Books &amp; Chapters</button>
               <span class="es-loc"><span id="esLoc">To-day&rsquo;s Portion</span><small id="esLocSub">King James Version &middot; verse by verse</small></span>
@@ -2574,7 +2635,12 @@
               <button type="button" class="btn plain" id="todayBtn" hidden>Back to To-day&rsquo;s Portion</button>
             </div>
             <div class="es-layout">
-              <aside class="es-rail" id="bookRail" aria-label="All sixty-six books, with their chapters">
+              <div class="es-main">
+              <aside class="es-rail" id="bookRail" aria-label="Search, and all sixty-six books with their chapters">
+                <h4>Search the Bible</h4>
+                <input type="search" id="textSearch" placeholder="Search the Scriptures&hellip;" aria-label="Search the Bible text" />
+                <div class="es-search-meta" id="searchMeta" aria-live="polite"></div>
+                <div class="es-results" id="searchResults"></div>
                 <h4>The Books of the Bible</h4>
                 <input type="search" id="railSearch" placeholder="Find a book&hellip;" aria-label="Find a book" />
                 <h4>The Old Testament</h4>
@@ -2602,22 +2668,23 @@
               <span class="wax-seal" id="readingSeal" aria-hidden="true">✠</span>
             </div>
               </div>
-              <aside class="es-side" aria-label="Thy portion, thy plan, thy highlights, and thy note">
-                <div class="es-side-card">
-                  <h4>To-day&rsquo;s Portion</h4>
-                  <p id="sidePortion">To-day&rsquo;s portion is reckoned from thy plan.</p>
-                  <button type="button" class="btn" id="sideReadToday">Read To-day&rsquo;s Portion</button>
+              </div>
+              <aside class="es-side" aria-label="Bible tools, in folder tabs: Bible Plans, Notes, and Highlights">
+                <div class="es-tabs" role="tablist" aria-label="Bible tools">
+                  <button type="button" class="es-tab" role="tab" id="sideTabPlans" aria-controls="sidePanelPlans" aria-selected="true">Bible Plans</button>
+                  <button type="button" class="es-tab" role="tab" id="sideTabNotes" aria-controls="sidePanelNotes" aria-selected="false">Notes</button>
+                  <button type="button" class="es-tab" role="tab" id="sideTabHighlights" aria-controls="sidePanelHighlights" aria-selected="false">Highlights</button>
                 </div>
-                <div class="es-side-card">
+                <div class="es-side-card es-panel" role="tabpanel" id="sidePanelPlans" aria-labelledby="sideTabPlans">
                   <h4>Thy Bible Plans</h4>
                   <p id="sidePlan">No plan taken up yet. Open Bible Plans to take up one of the plans in the app, or forge thine own.</p>
                   <button type="button" class="btn plain" id="sidePlansBtn">Bible Plans &mdash; In the App &amp; Thine Own</button>
                 </div>
-                <div class="es-side-card">
+                <div class="es-side-card es-panel" role="tabpanel" id="sidePanelHighlights" aria-labelledby="sideTabHighlights" hidden>
                   <h4>Thy Highlights</h4>
                   <div class="es-hl-list" id="sideHighlights"><p>No verses highlighted yet. Tap verses in the Reading, then Seal them, or lay a colour on them from the bar below the Reading.</p></div>
                 </div>
-                <div class="es-side-card">
+                <div class="es-side-card es-panel" role="tabpanel" id="sidePanelNotes" aria-labelledby="sideTabNotes" hidden>
                   <h4>A Note on These Verses</h4>
                   <p class="es-note-ref" id="sideNoteRef">Tap verses in the Reading, and thy note is written against them here.</p>
                   <input type="text" id="sideNoteTopic" placeholder="A topic of thine own &mdash; e.g. The Armour" aria-label="Topic for this note" />
@@ -2745,7 +2812,6 @@
       <section class="plate" id="armour">
         <div class="plate-head">
           <div class="numeral">PLATE IV</div>
-          <h2>The Armour of God</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>A series in seven parts, from Ephesians 6. One piece at a time. Stand.</p>
         </div>
@@ -2816,7 +2882,6 @@
       <section class="plate" id="company">
         <div class="plate-head">
           <div class="numeral">PLATE V</div>
-          <h2>Fellow Soldier</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>No knight reads alone. A Captain summons knights to a plan, and Fellow Soldiers read it together, day by day.</p>
         </div>
@@ -2859,7 +2924,6 @@
       <section class="plate" id="quests">
         <div class="plate-head">
           <div class="numeral">PLATE VI</div>
-          <h2>Quests</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Every quest is bound to one piece of the Armour of God. Accept it, finish it, and the badge of that piece is thine &mdash; and badges are what raise thee: Page, then Squire, then Knight through the Armour, then the offices.</p>
         </div>
@@ -2983,7 +3047,6 @@
       <section class="plate" id="ranks">
         <div class="plate-head">
           <div class="numeral">PLATE VII</div>
-          <h2>Ranks &amp; Seals</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Rank is not bought and not given for show. It is earned by reading, day after day, when no man watches.</p>
         </div>
@@ -3041,7 +3104,6 @@
       <section class="plate" id="trials">
         <div class="plate-head">
           <div class="numeral">PLATE VIII</div>
-          <h2>Trials</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Hard things, set for a season, and kept at the season&rsquo;s pace &mdash; one day&rsquo;s keeping in a day, and no faster. Take one up, and see it to the end.</p>
         </div>
@@ -3077,7 +3139,6 @@
       <section class="plate" id="join">
         <div class="plate-head">
           <div class="numeral">THE KINGDOM SERIES</div>
-          <h2>The Kingdom Hall</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Training in the Armour of Light, through 9 levels &mdash; entered by enlistment, in the King&rsquo;s hall. This enlistment is the only sign-up in Scabbard.</p>
         </div>
@@ -3177,8 +3238,6 @@
            them. Structure only — the lessons are filled in level by level. -->
       <section class="plate" id="series">
         <div class="plate-head">
-          <div class="numeral">THE KINGDOM SERIES</div>
-          <h2>The Kingdom Series</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Nine levels through the three stages, and then the fight that does not end till Christ returns.</p>
         </div>
@@ -3221,7 +3280,6 @@
       <section class="plate" id="level1">
         <div class="plate-head">
           <div class="numeral">LEVEL 1 &middot; PAGE 1</div>
-          <h2>Who You Are</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p id="lv1StageLine">Page — mentoring and learning. What thou wert, and what thou art now: rescued, and saved to the King.</p>
         </div>
@@ -3273,7 +3331,6 @@
       <section class="plate" id="profile">
         <div class="plate-head">
           <div class="numeral">THE KINGDOM SERIES</div>
-          <h2>Kingdom Profile</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Thy identity in the Kingdom Series — and all thy progress, kept.</p>
         </div>
@@ -3335,13 +3392,11 @@
            when he shares that note himself. -->
       <section class="plate" id="notes">
         <div class="plate-head">
-          <div class="numeral">NOTES</div>
-          <h2>Thy Journal</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Thy personal journal — every note thou hast written against what thou wast reading, most recent first.</p>
         </div>
         <div class="sheet">
-          <p class="landing-lede">This is thy own journal from the Reading. When a verse strikes thee, tap it in Bible Reading and write with the Quill, or write against the verses in hand on the Reading&rsquo;s side bench — the note stands here, against its passage, under a topic of thine own. Open any note to read it whole, mend it with Edit, or send it to another with Share.</p>
+          <p class="landing-lede">This is thy own journal from the Reading. When a verse strikes thee, tap it in the Bible and write with the Quill, or write against the verses in hand in the Bible page&rsquo;s Notes folder — the note stands here, against its passage, under a topic of thine own. Open any note to read it whole, mend it with Edit, or send it to another with Share.</p>
           <p class="journal-note">Thy journal is kept on this device only. Nothing of it is sent anywhere — a note leaves this device only when thou thyself sharest that one note.</p>
           <div class="notes-tools" style="margin-top:0.8rem;">
             <input type="search" id="notesSearch" placeholder="Search thy journal — a word, a topic, or a passage&hellip;" aria-label="Search thy journal" />
@@ -3373,13 +3428,11 @@
       <!-- ============ STUDY SERIES ============ -->
       <section class="plate" id="study">
         <div class="plate-head">
-          <div class="numeral">STUDY SERIES</div>
-          <h2>Study Series</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>All the Study Series in one hall. Reading is open to everyone; a series is entered by joining it.</p>
         </div>
         <div class="sheet">
-          <p class="landing-lede">Bible Reading is the daily work of Scabbard, open to every reader. The Study Series are the training that stands beyond it — ordered studies, taken up one at a time, each with its own lessons, quests, and reckoning. This page is the hall where every series stands: enter the one thou hast joined, or join the Kingdom Series here.</p>
+          <p class="landing-lede">The Bible page is the daily work of Scabbard, open to every reader. The Study Series are the training that stands beyond it — ordered studies, taken up one at a time, each with its own lessons, quests, and reckoning. This page is the hall where every series stands: enter the one thou hast joined, or join the Kingdom Series here.</p>
           <div class="series-card">
             <h3>The Kingdom Series</h3>
             <p>Training in the Armour of Light through nine levels in three stages — Page, Squire, Knight — and Level 10 beyond them: continuing the fight and growing till Christ returns. One lesson a day, memorization in every level, prayer with the armour, and a test of 21 questions at each level&rsquo;s end.</p>
@@ -3421,8 +3474,6 @@
       <!-- ============ CONTACT ============ -->
       <section class="plate" id="contact">
         <div class="plate-head">
-          <div class="numeral">CONTACT</div>
-          <h2>Contact</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Sign thy name, leave a review, or write for updates and concerns.</p>
         </div>
@@ -3478,8 +3529,6 @@
       <!-- ============ DONATE ============ -->
       <section class="plate" id="donate">
         <div class="plate-head">
-          <div class="numeral">DONATE</div>
-          <h2>Donate</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Scabbard is free to every knight. It stands by the gifts of those who can give.</p>
         </div>
@@ -3523,29 +3572,20 @@
 
       <!-- ============ ADMINISTRATOR ============ -->
       <!-- The owner's own tab: the whole system's traffic in one view, and
-           the held signings awaiting his filter. On this device the tab is
-           a structure: the passcode below is a form only, and the traffic
-           panels hold no numbers until a server keeps the count. -->
+           the held signings awaiting his filter. It is gated on the owner's
+           Gmail sign-in: the tab stands in the top bar, and this page
+           opens, only for a signed-in owner session (see the gate in the
+           script below). For every other reader it is not there at all.
+           The traffic panels hold no numbers until a server keeps the
+           count. -->
       <section class="plate" id="admin">
         <div class="plate-head">
-          <div class="numeral">ADMINISTRATOR</div>
-          <h2>Administrator</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>The owner&rsquo;s view of the whole Scabbard system — its traffic, and the signings held for his filter.</p>
         </div>
         <div class="sheet">
-          <div id="adminGate">
-            <p class="landing-lede">This tab is for the owner of Scabbard alone. It is the door to the system&rsquo;s traffic — how many come, how many read, and where they stand — and to the signings held for approval before any of them stands public.</p>
-            <form class="note-form" id="adminForm" style="border-top:none; margin-top:0.8rem; padding-top:0;">
-              <div>
-                <label for="adminPass">The Owner&rsquo;s Passcode</label>
-                <input type="password" id="adminPass" autocomplete="current-password" placeholder="The owner&rsquo;s passcode" />
-              </div>
-              <div class="seal-row" style="margin-top:0;">
-                <button type="submit" class="btn">Enter the Administrator&rsquo;s View</button>
-                <span class="form-msg" id="adminMsg" aria-live="polite"></span>
-              </div>
-            </form>
+          <div id="adminLocked">
+            <p class="landing-lede">This tab is for the owner of Scabbard alone, and it opens only when the owner is signed in with his Gmail. For every other reader it stands hidden — it is not in the top bar, and this page turns them back to Home.</p>
           </div>
           <div id="adminView" style="display:none">
             <div class="landing-grid three">
@@ -3558,7 +3598,6 @@
             <p class="fell" style="font-style:italic; color:var(--ink-soft)">Signings of four stars and up wait here. Approve one and it stands in the Public Word on the Contact page; refuse it and it never stands public. Lower signings stay in the guestbook alone.</p>
             <div class="note-list" id="adminQueue" style="margin-top:0.7rem;"></div>
             <p class="notes-empty" id="adminQueueEmpty">Nothing is held for thy filter on this device.</p>
-            <p style="margin-top:0.9rem;"><button type="button" class="btn plain" id="adminLock">Shut the Administrator&rsquo;s View</button></p>
           </div>
         </div>
       </section>
@@ -3567,7 +3606,6 @@
       <section class="plate" id="settings">
         <div class="plate-head">
           <div class="numeral">PLATE IX</div>
-          <h2>Settings</h2>
           <div class="rule" aria-hidden="true">❦</div>
           <p>Set the Reading to thy hand.</p>
         </div>
@@ -3585,11 +3623,11 @@
             </div>
           </div>
           <div class="setting-row">
-            <div><div class="s-name">Rest on the Lord&rsquo;s Day</div><div class="s-desc">The same rest kept in the Reckoning, in Bible Reading.</div></div>
+            <div><div class="s-name">Rest on the Lord&rsquo;s Day</div><div class="s-desc">The same rest kept in the Reckoning, in the Bible.</div></div>
             <div class="s-ctrl"><button class="btn" id="setRestBtn" aria-pressed="true">Rest Kept</button></div>
           </div>
           <div class="setting-row">
-            <div><div class="s-name">Remind Me Each Day</div><div class="s-desc">The daily alert itself comes through thy device&rsquo;s Reminders or Calendar, from the reminders file in Bible Reading &mdash; a web page cannot wake itself. With this on, Scabbard also speaks when thou openest it and to-day&rsquo;s portion stands yet unread.</div></div>
+            <div><div class="s-name">Remind Me Each Day</div><div class="s-desc">The daily alert itself comes through thy device&rsquo;s Reminders or Calendar, from the reminders file in the Bible &mdash; a web page cannot wake itself. With this on, Scabbard also speaks when thou openest it and to-day&rsquo;s portion stands yet unread.</div></div>
             <div class="s-ctrl"><button class="btn" id="notifyBtn" aria-pressed="false">Reminder Off</button></div>
           </div>
           <div class="setting-row">
@@ -3772,30 +3810,31 @@
           return en;
         }
         var prefersReducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-        /* ---------- The Opening : the logo reel, full screen, on every open ----------
+        /* ---------- The Opening : the logo, animated, full screen, on every open ----------
            Scabbard opens free to everyone — no sign-up stands at the door,
            for new or returning alike. The first thing seen is the approved
-           logo reel, full screen; then it lifts, and the hall stands open.
+           logo itself, animated — the sword-S draws in and a gleam crosses
+           the blade; then it lifts, and the hall stands open.
            The only sign-up in Scabbard is joining the Kingdom Series, in
            the Kingdom Hall. A device record left from the old gate only
            prefills that joining and names the rank path — it bars nothing. */
         applyEnlistment();
         (function initSplash() {
-          var sp = $("splash"), vid = $("splashReel");
+          var sp = $("splash");
           if (!sp) { document.body.classList.remove("splash-open"); return; }
           var lifted = false;
           /* The opening stands a full three seconds on every open, new or
-             returning. Nothing lifts it sooner — not a tap, not the reel
-             ending early, not the reel failing: if the film cannot play,
-             the still mark stands in its place for the same three seconds.
-             Only then does the opening fade into the hall. */
+             returning. Nothing lifts it sooner — not a tap, and not the
+             animation ending early: the logo's own drawing and gleam play
+             inside the same three seconds. Only then does the opening
+             fade into the hall, on its own. */
           var HOLD_MS = 3000;
           var shownAt = Date.now();
           function lift() {
             if (lifted) return; lifted = true;
             document.body.classList.remove("splash-open");
             sp.classList.add("lift");
-            setTimeout(function () { sp.style.display = "none"; if (vid) { try { vid.pause(); } catch (e) {} } }, 700);
+            setTimeout(function () { sp.style.display = "none"; }, 700);
           }
           function requestLift() {
             var left = HOLD_MS - (Date.now() - shownAt);
@@ -3803,19 +3842,8 @@
             setTimeout(lift, left);
           }
           sp.addEventListener("click", requestLift);
-          if (prefersReducedMotion) {
-            if (vid) { vid.removeAttribute("autoplay"); try { vid.pause(); } catch (e) {} vid.style.display = "none"; }
-            requestLift();
-            return;
-          }
-          if (vid) {
-            vid.addEventListener("ended", requestLift);
-            vid.addEventListener("error", function () { vid.style.display = "none"; requestLift(); });
-            var p = null;
-            try { p = vid.play(); } catch (e) { requestLift(); }
-            if (p && typeof p.catch === "function") { p.catch(function () { if (!lifted) { vid.style.display = "none"; requestLift(); } }); }
-          }
-          /* However the film fares, the opening never stands shut for good */
+          requestLift();
+          /* Whatever happens, the opening never stands shut for good */
           setTimeout(lift, 7000);
         })();
         var leaveBtn = $("leaveBtn");
@@ -4290,8 +4318,8 @@
           return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
         function refreshHome() {
-          /* Home is the dashboard: renderRoll writes to-day's portion into
-             the Home band itself, so there is nothing to copy across. */
+          /* Home is the dashboard: renderRoll reckons the standing there
+             itself, so there is nothing to copy across. */
         }
         function noteEntries() {
           var out = [];
@@ -4724,16 +4752,15 @@
           refreshAdoptUI();
         }
         /* ---------- The Muster Roll, reckoned live ----------
-           To-day's portion, the day count, the progress, the days in a row, the
+           The day count, the progress, the days in a row, the
            chapters and the rank are all counted from the plan itself, the day it
            began, and the days actually marked read — never from a sample. A knight
            new-come stands at Day 1, with nothing read and the first title his. */
         function renderRoll() {
           var info = portionInfo();
-          var portionEl = $("rollPortion");
+          if (typeof renderPortionStrip === "function") renderPortionStrip();
           var pf = $("rollProgress");
           if (!info) {
-            if (portionEl) portionEl.textContent = "No plan is forged yet. Forge one in Bible Reading — choose thy books there.";
             $("rollDayLabel").textContent = "No plan";
             $("rollRemainLabel").textContent = "";
             $("rollStreak").textContent = "0";
@@ -4755,17 +4782,6 @@
               for (var c = g.from; c <= g.to; c++) perBook[g.book][c] = true;
             });
           });
-          if (portionEl) {
-            portionEl.textContent = "";
-            portionEl.appendChild(document.createTextNode("To-day\u2019s portion, from "));
-            var r1 = document.createElement("span"); r1.className = "ref"; r1.textContent = cfg.name;
-            portionEl.appendChild(r1);
-            portionEl.appendChild(document.createTextNode(":"));
-            portionEl.appendChild(document.createElement("br"));
-            var r2 = document.createElement("span"); r2.className = "ref"; r2.textContent = portionText(info.day.groups);
-            portionEl.appendChild(r2);
-            portionEl.appendChild(document.createTextNode(". Read it before the day\u2019s work begins."));
-          }
           var pct = total ? Math.round(100 * readDays / total) : 0;
           if (pf) { pf.style.width = pct + "%"; pf.setAttribute("aria-label", readDays + " of " + total + " days read"); }
           $("rollDayLabel").textContent = "Day " + (info.idx + 1) + " of " + total;
@@ -5692,6 +5708,21 @@
             }
           }
         }
+        /* To-day's portion stands once, at the head of the Reading page:
+           from the reader's plan, with the plan named — or, with no plan
+           taken up, a prompt to make one, opening the Bible Plans hover. */
+        function renderPortionStrip() {
+          var body = $("readingPortionBody"); if (!body) return;
+          var readBtn = $("readingPortionRead"), makeBtn = $("readingPortionMake");
+          var pi = portionInfo();
+          if (pi) {
+            body.innerHTML = 'From <span class="ref">' + navEsc((state.forge || {}).name || "thy plan") + '</span>: <span class="ref">' + navEsc(portionText(pi.day.groups)) + '</span> · Day ' + (pi.idx + 1) + " of " + lastSchedule.length + ".";
+          } else {
+            body.textContent = "No plan is taken up yet. Make a plan, and to-day’s portion will stand here, at the head of thy Reading.";
+          }
+          if (readBtn) readBtn.hidden = !pi;
+          if (makeBtn) makeBtn.hidden = !!pi;
+        }
         function syncEsChrome(info) {
           var loc = currentLoc();
           if (!browseLoc) { railBook = loc.book; renderRailChaps(); }
@@ -5708,11 +5739,7 @@
             else if (info && info.day) sub.textContent = portionText(info.day.groups) + " \u00b7 King James Version";
           }
           if (tb) tb.hidden = !browseLoc;
-          var sp = $("sidePortion");
-          if (sp) {
-            var pi = portionInfo();
-            sp.innerHTML = pi ? "From <span class=\"ref\">" + navEsc((state.forge || {}).name || "thy plan") + "</span>: <span class=\"ref\">" + navEsc(portionText(pi.day.groups)) + "</span> \u00b7 Day " + (pi.idx + 1) + " of " + lastSchedule.length + "." : "No plan is forged yet. Open Bible Plans and take one up.";
-          }
+          renderPortionStrip();
           var spl = $("sidePlan");
           if (spl) spl.textContent = state.sealed ? "Thy plan: " + state.sealed.name + " \u2014 " + lastSchedule.length + " days of reading. The Tally, calendar, and reminders stand in Bible Plans." : "No plan taken up yet. Open Bible Plans to take up one of the plans in the app, or forge thine own.";
           renderSideHighlights();
@@ -5766,7 +5793,63 @@
         if ($("plansHoverBtn")) $("plansHoverBtn").addEventListener("click", openPlans);
         if ($("sidePlansBtn")) $("sidePlansBtn").addEventListener("click", openPlans);
         if ($("todayBtn")) $("todayBtn").addEventListener("click", function () { browseLoc = null; renderReading(); });
-        if ($("sideReadToday")) $("sideReadToday").addEventListener("click", function () { browseLoc = null; renderReading(); });
+        if ($("readingPortionRead")) $("readingPortionRead").addEventListener("click", function () { browseLoc = null; renderReading(); });
+        if ($("readingPortionMake")) $("readingPortionMake").addEventListener("click", openPlans);
+
+        /* ---------- The right quarter : folder tabs ----------
+           Bible Plans, Notes, and Highlights stand as folder tabs in the
+           right quarter of the Bible page; one folder open at a time. */
+        document.querySelectorAll(".es-tab").forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            document.querySelectorAll(".es-tab").forEach(function (t) { t.setAttribute("aria-selected", String(t === tab)); });
+            document.querySelectorAll(".es-panel").forEach(function (p) { p.hidden = p.id !== tab.getAttribute("aria-controls"); });
+          });
+        });
+
+        /* ---------- Search the Bible : the whole KJV text, in the left rail ----------
+           Every verse is searched as it stands in the book; the first
+           eighty found are listed, and tapping one reads it in its place. */
+        function plainVerseText(s) { return String(s || "").replace(/\u0001|\u0002/g, ""); }
+        function runTextSearch() {
+          var input = $("textSearch"), host = $("searchResults"), meta = $("searchMeta");
+          if (!input || !host) return;
+          var q = (input.value || "").trim().toLowerCase();
+          host.innerHTML = "";
+          if (meta) meta.textContent = "";
+          if (q.length < 2 || !window.BIBLE_TEXT) return;
+          var found = [], total = 0;
+          ALL_NAMES.forEach(function (book) {
+            var chs = window.BIBLE_TEXT[book] || [];
+            chs.forEach(function (verses, ci) {
+              (verses || []).forEach(function (raw, vi) {
+                var t = plainVerseText(raw);
+                if (t.toLowerCase().indexOf(q) !== -1) {
+                  total++;
+                  if (found.length < 80) found.push({ book: book, ch: ci + 1, verse: vi + 1, text: t });
+                }
+              });
+            });
+          });
+          if (meta) meta.textContent = total
+            ? total.toLocaleString("en-US") + (total === 1 ? " verse" : " verses") + " found" + (total > found.length ? " — the first " + found.length + " stand below" : "")
+            : "No verse found with those words.";
+          found.forEach(function (r) {
+            var b = document.createElement("button"); b.type = "button"; b.className = "es-result";
+            var ref = document.createElement("span"); ref.className = "es-result-ref"; ref.textContent = r.book + " " + r.ch + ":" + r.verse;
+            var tx = document.createElement("span"); tx.textContent = r.text;
+            b.appendChild(ref); b.appendChild(tx);
+            b.addEventListener("click", function () { jumpTo(r.book, r.ch, r.verse); });
+            host.appendChild(b);
+          });
+        }
+        if ($("textSearch")) {
+          var searchTimer = null;
+          $("textSearch").addEventListener("input", function () {
+            if (searchTimer) clearTimeout(searchTimer);
+            searchTimer = setTimeout(runTextSearch, 200);
+          });
+          $("textSearch").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); runTextSearch(); } });
+        }
         if ($("booksToggle")) $("booksToggle").addEventListener("click", function () {
           var r = $("bookRail"); if (!r) return;
           var open = r.classList.toggle("open");
@@ -5996,20 +6079,32 @@
         }
         renderPublic();
         renderAdminQueue();
-        if ($("adminForm")) $("adminForm").addEventListener("submit", function (e) {
-          e.preventDefault();
-          var pass = (($("adminPass") || {}).value || "").trim();
-          var msg = $("adminMsg");
-          if (!pass) { if (msg) msg.textContent = "Give the passcode first."; return; }
-          $("adminGate").style.display = "none";
-          $("adminView").style.display = "";
-          renderAdminQueue();
-        });
-        if ($("adminLock")) $("adminLock").addEventListener("click", function () {
-          $("adminView").style.display = "none";
-          $("adminGate").style.display = "";
-          var p = $("adminPass"); if (p) p.value = "";
-        });
+        /* ---------- Administrator : the owner's tab, gated on his Gmail ----------
+           The Administrator tab belongs to the owner alone: it stands in the
+           top bar, and this page opens, only while the owner is signed in
+           with his Gmail, demovillec21@gmail.com. A static page cannot read
+           a Gmail sign-in by itself — the sign-in has to be confirmed by the
+           layer that serves Scabbard (Google sign-in, with the account's
+           email checked on the server), which then sets
+           window.SCABBARD_SESSION = { email: "demovillec21@gmail.com" }
+           before this script runs. Until that layer is wired, no session is
+           ever confirmed here, so the tab stays hidden from everyone, the
+           owner included. Nothing stands in for the check: no passcode, and
+           no flag kept on the device. */
+        var OWNER_EMAIL = "demovillec21@gmail.com";
+        function ownerSignedIn() {
+          var s = window.SCABBARD_SESSION;
+          return !!(s && typeof s.email === "string" && s.email.toLowerCase() === OWNER_EMAIL);
+        }
+        function applyOwnerGate() {
+          var on = ownerSignedIn();
+          var nav = $("adminNav"); if (nav) nav.hidden = !on;
+          var view = $("adminView"); if (view) view.style.display = on ? "" : "none";
+          var locked = $("adminLocked"); if (locked) locked.style.display = on ? "none" : "";
+          if (on) renderAdminQueue();
+          return on;
+        }
+        applyOwnerGate();
 
 
         /* ---------- Pages : each part is its own page, shown alone for focus ---------- */
@@ -6026,6 +6121,9 @@
           /* The Kingdom Series pages do not exist in a knight's app until he
              has joined the Series — a road to one of them lands on the Hall. */
           if (SERIES_PAGES.indexOf(id) !== -1 && !kingdom) id = "join";
+          /* The Administrator page opens for the owner alone, signed in with
+             his Gmail; a road to it lands anyone else on Home. */
+          if (id === "admin" && !ownerSignedIn()) id = "home";
           /* The top bar is the only navigation: Home is the dashboard, and
              Bible Reading carries the Reading and the Forge together. */
           if (id === currentPage && focusHead !== true) { window.scrollTo(0, 0); return; }
@@ -6042,7 +6140,7 @@
           setForge(false);
           window.scrollTo(0, 0);
           if (focusHead) {
-            var h = $(id).querySelector(".plate-head h2");
+            var h = $(id).querySelector(".plate-head");
             if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
           }
         }
@@ -6110,7 +6208,7 @@
         function notifyStateText() {
           var el = $("notifyState"); if (!el) return;
           if (!notifySupported()) {
-            el.textContent = "This browser allows no notifications \u2014 the reminders file in Bible Reading is thy daily alert.";
+            el.textContent = "This browser allows no notifications \u2014 the reminders file in the Bible is thy daily alert.";
             return;
           }
           var p = Notification.permission;
