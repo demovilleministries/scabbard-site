@@ -1999,6 +1999,54 @@
         100% { transform: translateX(330%) skewX(-18deg); }
       }
     </style>
+    <style>
+      /* ================= PHONES : NOTHING CUT OFF ================= */
+      /* The shell fits each page to one screen and clips whatever outgrows
+         its sheet. Every other plate's sheet scrolls within itself — the
+         Muster Roll's never did, so on a phone its sponsor lines and the
+         knight miniature stood below the sheet's edge, cut off and out of
+         reach for good. The Roll takes the same liberty as its fellows,
+         and its give panel stands in the flow of the page, opening where
+         its button stands instead of anchored to a frame that now moves. */
+      #roll .sheet {
+        overflow-y: auto; overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin; scrollbar-color: var(--burgundy) var(--parchment);
+      }
+      #roll .give-panel { position: static; margin-top: 0.9rem; }
+      /* Every sheet that scrolls within itself shows its scrollbar's colour
+         the same way, so the knight can see there is more below. */
+      #forge .sheet, #armour .sheet, #company .sheet, #trials .sheet,
+      #quests .sheet, #ranks .sheet, #settings .sheet {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin; scrollbar-color: var(--burgundy) var(--parchment);
+      }
+
+      @media (max-width: 560px) {
+        /* The Reckoning's four reckonings abreast squeezed their names
+           mid-word on a phone ("Chapters a— / Day"). Two abreast, each
+           name stands whole. */
+        .reckon-grid { grid-template-columns: repeat(2, 1fr); }
+        .reckon-grid div { min-width: 0; }
+        .reckon-grid b { overflow-wrap: anywhere; }
+        /* The days slider likewise: name and count on one line, the
+           slider itself the full width beneath — never a stub of a track. */
+        .slider-row { display: flex; flex-wrap: wrap; align-items: baseline; }
+        .slider-row label { flex: 1 1 auto; }
+        .slider-row output { flex: none; }
+        .slider-row input[type="range"] { flex: 1 1 100%; order: 3; }
+        /* The summons word takes its own full line, so neither the word
+           nor the oath button is shorn at the edge. */
+        .summons-row input[type="text"] { flex: 1 1 100%; min-width: 0; }
+        .summons-row .btn { flex: 1 1 auto; }
+        /* The two rank paths stack, and each rank's requirement takes a
+           line of its own beneath its name — no column is squeezed
+           between the name and the state again. */
+        .rank-paths { grid-template-columns: 1fr; }
+        .rank-ladder .rreq { flex: 1 1 100%; order: 3; }
+        .rank-ladder .rstate { margin-left: auto; }
+      }
+    </style>
   </head>
   <body class="gate-open">
 
