@@ -2069,6 +2069,76 @@
         .rank-ladder .rstate { margin-left: auto; }
       }
     </style>
+    <style>
+      /* ================= USE EVERY CORNER — PHONE FULL-BLEED ================= */
+      /* On a phone there is no parchment margin, no centred column, and no
+         empty stretch inside a card. Every surface runs edge to edge —
+         left, right, top, and bottom — and each page's panel stretches to
+         fill the height the screen gives it, so the corners work too. */
+      @media (max-width: 899px) {
+        /* ---- The shell: no side gutters anywhere ---- */
+        main { max-width: none; }
+        .plate { padding: 0 !important; }
+        .plate-head { margin-bottom: 0; padding: 0.35rem 0.6rem 0.3rem; }
+        .plate-head p { margin-top: 0.1rem; }
+        .sheet {
+          padding: 0.6rem 0.65rem 0.7rem;
+          border-left: none; border-right: none;
+          outline: none;
+          box-shadow: inset 0 0 55px rgba(101,67,33,0.30), inset 0 1px 0 rgba(255,255,250,0.5);
+        }
+        .masthead { padding: 0.35rem 0.5rem 0.3rem; }
+        .masthead .brand-mark { height: 2rem; }
+        .masthead h1 { font-size: 1.6rem; }
+        .page-turn { padding: 0; gap: 0; max-width: none; }
+        .page-turn .btn { border-radius: 0; min-height: 2.6rem; }
+        .page-turn .spacer { min-width: 0; }
+        .dock-inner { max-width: none; }
+        .verse-bar-inner { max-width: none; padding-left: 0.5rem; padding-right: 0.5rem; }
+        .summon-sheet {
+          left: 0; right: 0; width: 100%; max-width: none; transform: none;
+          padding-left: 0.65rem; padding-right: 0.65rem;
+        }
+        /* Panels that were inset cards bleed to the sheet's own edges */
+        .enlisted-strip { margin-left: -0.65rem; margin-right: -0.65rem; border-left: none; border-right: none; padding-left: 0.65rem; padding-right: 0.65rem; }
+        .reckoning { margin-left: -0.65rem; margin-right: -0.65rem; border-left: none; border-right: none; outline: none; padding-left: 0.65rem; padding-right: 0.65rem; }
+        #roll .give-panel { margin-left: -0.65rem; margin-right: -0.65rem; border-left: none; border-right: none; outline: none; padding-left: 0.65rem; padding-right: 0.65rem; }
+        .purveyor { margin-left: -0.65rem; margin-right: -0.65rem; border-left: none; border-right: none; padding-left: 0.65rem; padding-right: 0.65rem; }
+
+        /* ---- The Gate: the card IS the screen ---- */
+        .gate-main { padding: 0 !important; max-width: none !important; }
+        .gate-top { padding: 0.45rem 0.6rem 0.4rem; }
+        .gate-sheet {
+          border-left: none; border-right: none; border-bottom: none;
+          outline: none;
+          box-shadow: inset 0 0 55px rgba(101,67,33,0.30), inset 0 1px 0 rgba(255,255,250,0.5);
+          padding: 0.6rem 0.75rem 0.55rem;
+          justify-content: flex-start;
+        }
+        /* The install panel stretches to fill whatever height the form
+           leaves, instead of that height standing empty below it. */
+        .install-box { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+        .install-box .install-steps { flex: none; }
+        .gate-foot { padding-left: 0.5rem; padding-right: 0.5rem; }
+
+        /* ---- The Reading: the chapter takes the whole width ---- */
+        #reading { padding: 0 !important; }
+        #reading .reading-stage { border-left: none; border-right: none; outline: none; }
+        #reading .reading-inner { padding: 0.3rem; }
+        #reading .reading-scroll {
+          border-left: none; border-right: none; outline: none;
+          padding: 0.6rem 0.55rem;
+          box-shadow: inset 0 0 55px rgba(101,67,33,0.30), inset 0 1px 0 rgba(255,255,250,0.5);
+        }
+        #reading .passage .v { padding-left: 1.75rem; padding-right: 0.15rem; }
+        #reading .passage .vn { left: 0.1rem; }
+
+        /* ---- Forge overlays: full-width, corner to corner ---- */
+        details.books-drop .drop-body { width: 100vw; max-width: 100vw; outline: none; border-left: none; border-right: none; }
+        #forge .tally-wrap, #forge .reminders-wrap { width: 100vw; max-width: 100vw; }
+        #forge .tally-sheet { border-left: none; border-right: none; }
+      }
+    </style>
   </head>
   <body class="gate-open">
 
