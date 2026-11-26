@@ -588,6 +588,17 @@
       .purveyor .ad-mark { font-family: "IM Fell English SC", serif; font-size: 0.72rem; letter-spacing: 0.22em; color: var(--ink-soft); }
       .purveyor h3 { font-family: "IM Fell English SC", serif; font-size: 1.15rem; color: var(--burgundy); margin: 0.25rem 0 0.15rem; }
       .purveyor p { font-size: 0.98rem; }
+      /* ---------- Reserved ad spaces : placeholders only, no live ads yet ---------- */
+      /* Marked, empty slots on the dashboard and the other non-reading pages,
+         sized and placed so a real affiliate link or a real sponsor drops
+         straight in later with no layout change. Never in the Reading. */
+      .ad-slot { border: 1px dashed #8a6f3c; padding: 0.9rem 1rem; background: rgba(255,252,240,0.18); }
+      .ad-slot .ad-mark { font-family: "IM Fell English SC", serif; font-size: 0.72rem; letter-spacing: 0.22em; color: var(--ink-soft); }
+      .ad-slot h3 { font-family: "IM Fell English SC", serif; font-size: 1.15rem; color: var(--burgundy); margin: 0.25rem 0 0.15rem; }
+      .ad-slot p { font-size: 0.98rem; }
+      .ad-slot.wide { margin-top: 0.8rem; }
+      .ad-sect-head { font-family: "IM Fell English SC", serif; color: var(--burgundy); font-size: 1.25rem; }
+      .ad-sect-note { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); margin-top: 0.3rem; }
       .give-panel { display: none; border-top: 3px double #8a6f3c; margin-top: 1.2rem; padding-top: 1rem; }
       .give-panel.open { display: block; }
       .give-amounts { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem; }
@@ -2608,6 +2619,31 @@
               <a class="btn" href="#settings">Settings</a>
             </div>
           </div>
+          <hr class="double-rule" style="color:#8a6f3c" />
+          <h3 class="ad-sect-head">Recommended Bibles &amp; Books</h3>
+          <p class="ad-sect-note">Spaces kept on the dashboard for Bibles and books worth putting in a reader&rsquo;s hands. Each stands empty until the book is chosen and its link set in its place.</p>
+          <div class="landing-grid three">
+            <div class="ad-slot" data-ad-slot="affiliate-bible" data-ad-type="affiliate">
+              <div class="ad-mark">AFFILIATE SPACE &middot; RESERVED</div>
+              <h3>Recommended Bible</h3>
+              <p>This space is reserved for a Bible chosen to recommend. It stands empty until that Bible and its link are in place &mdash; nothing is recommended, and nothing is sold, from this space yet.</p>
+            </div>
+            <div class="ad-slot" data-ad-slot="affiliate-book-1" data-ad-type="affiliate">
+              <div class="ad-mark">AFFILIATE SPACE &middot; RESERVED</div>
+              <h3>Recommended Book</h3>
+              <p>This space is reserved for a book chosen to recommend. It stands empty until that book and its link are in place &mdash; nothing is recommended, and nothing is sold, from this space yet.</p>
+            </div>
+            <div class="ad-slot" data-ad-slot="affiliate-book-2" data-ad-type="affiliate">
+              <div class="ad-mark">AFFILIATE SPACE &middot; RESERVED</div>
+              <h3>Recommended Book</h3>
+              <p>This space is reserved for a book chosen to recommend. It stands empty until that book and its link are in place &mdash; nothing is recommended, and nothing is sold, from this space yet.</p>
+            </div>
+          </div>
+          <div class="ad-slot wide" data-ad-slot="sponsor-home" data-ad-type="sponsor">
+            <div class="ad-mark">SPONSOR SPACE &middot; RESERVED</div>
+            <h3>A Sponsor of the Work</h3>
+            <p>This space is reserved for a sponsor of the work. It stands empty until a real sponsor is in place &mdash; nothing is advertised here yet.</p>
+          </div>
         </div>
       </section>
 
@@ -3429,6 +3465,12 @@
               <span class="form-msg" id="noteMsg" aria-live="polite"></span>
             </div>
           </form>
+          <hr class="double-rule" style="color:#8a6f3c" />
+          <div class="ad-slot" data-ad-slot="affiliate-notes-book" data-ad-type="affiliate">
+            <div class="ad-mark">AFFILIATE SPACE &middot; RESERVED</div>
+            <h3>Recommended Book</h3>
+            <p>This space is reserved for a book chosen to recommend. It stands empty until that book and its link are in place &mdash; nothing is recommended, and nothing is sold, from this space yet.</p>
+          </div>
         </div>
       </section>
 
@@ -3474,6 +3516,11 @@
               <a class="btn plain" href="#trials">Trials</a>
               <a class="btn plain" href="#company">Fellow Soldier</a>
             </div>
+          </div>
+          <div class="ad-slot wide" data-ad-slot="affiliate-study-book" data-ad-type="affiliate">
+            <div class="ad-mark">AFFILIATE SPACE &middot; RESERVED</div>
+            <h3>Recommended Book for the Study</h3>
+            <p>This space is reserved for a book chosen to recommend alongside the Series. It stands empty until that book and its link are in place &mdash; nothing is recommended, and nothing is sold, from this space yet.</p>
           </div>
         </div>
       </section>
@@ -3530,6 +3577,12 @@
           <p class="fell" style="font-style:italic; color:var(--ink-soft)">Every signing on this device, held and public alike, stands in the guestbook below.</p>
           <div class="note-list" id="gbList" style="margin-top:0.7rem;"></div>
           <p class="notes-empty" id="gbEmpty">No signings yet on this device. Be the first to sign.</p>
+          <hr class="double-rule" style="color:#8a6f3c" />
+          <div class="ad-slot" data-ad-slot="sponsor-contact" data-ad-type="sponsor">
+            <div class="ad-mark">SPONSOR SPACE &middot; RESERVED</div>
+            <h3>A Sponsor of the Work</h3>
+            <p>This space is reserved for a sponsor of the work. It stands empty until a real sponsor is in place &mdash; nothing is advertised here yet.</p>
+          </div>
         </div>
       </section>
 
