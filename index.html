@@ -2243,6 +2243,113 @@
         .gate-main { padding: 1.1rem 1rem 0.9rem; }
       }
     </style>
+    <style>
+      /* ================= THE KINGDOM PROFILE & THE LEVELS ================= */
+      /* The Series gains its structure: a separate Kingdom Profile (the
+         reader's identity in the Series, kept on this device only), the
+         Hall of Levels — nine levels in three stages, and Level 10 beyond
+         them — and Level 1 set down as the working template: seven day
+         shells, memorization, challenges, and the test form. The lessons
+         themselves are not written here; every shell stands empty, ready
+         to be filled. These sheets scroll within themselves, as the
+         Kingdom Hall sheet does — the shell itself never scrolls. */
+      #series .sheet, #level1 .sheet, #profile .sheet {
+        overflow-y: auto; overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin; scrollbar-color: var(--burgundy) var(--parchment);
+      }
+      #series .plate-head h2 { color: var(--forest-deep); }
+      #level1 .plate-head h2 { color: var(--burgundy-deep); }
+      #profile .plate-head h2 { color: #3d2c10; }
+      .ks-wrap { max-width: 46rem; margin: 0 auto; }
+      .ks-wrap h3.ks-h { font-family: "IM Fell English SC", serif; font-weight: 400; color: var(--burgundy); font-size: 1.22rem; margin: 1.35rem 0 0.55rem; }
+      .ks-wrap h3.ks-h:first-child { margin-top: 0.2rem; }
+      .ks-note { border: 1px solid #8a6f3c; background: rgba(255,252,240,0.3); padding: 0.75rem 0.9rem; margin: 0.9rem 0; }
+      .ks-note p { font-family: "IM Fell English", serif; font-size: 0.99rem; line-height: 1.5; margin: 0 0 0.45rem; }
+      .ks-note p:last-child { margin-bottom: 0; }
+      .ks-note ul { margin: 0.3rem 0 0 1.15rem; padding: 0; font-family: "IM Fell English", serif; font-size: 0.98rem; line-height: 1.45; }
+      .ks-note li { margin-bottom: 0.3rem; }
+      .ks-shell-line { flex: 1 1 auto; border-bottom: 1px dotted rgba(138,111,60,0.65); font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.94rem; padding-bottom: 0.12rem; }
+
+      /* The avatar holder: the reader's face in the app, as a face is
+         held in a round frame — a plain silhouette stands in it until
+         the Page figures are drawn and approved. */
+      .ks-strip { display: flex; align-items: center; gap: 0.9rem; border: 1px solid #8a6f3c; background: rgba(255,252,240,0.35); padding: 0.7rem 0.85rem; margin-bottom: 1rem; }
+      .ks-holder { flex: none; border-radius: 50%; overflow: hidden; border: 2px solid var(--gold); background: radial-gradient(circle at 50% 32%, #6d5b3e, #3c2d1a 78%); color: #d9c9a3; display: flex; align-items: flex-end; justify-content: center; }
+      .ks-holder svg { width: 82%; height: 82%; display: block; }
+      .ks-holder.h64 { width: 64px; height: 64px; }
+      .ks-holder.h96 { width: 96px; height: 96px; }
+      .ks-strip .ks-who { flex: 1 1 auto; min-width: 0; }
+      .ks-strip .ks-who b { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 1.18rem; color: var(--burgundy-deep); display: block; line-height: 1.2; }
+      .ks-strip .ks-who span { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.96rem; line-height: 1.35; display: block; }
+      .ks-strip .btn { flex: none; }
+
+      /* The Hall of Levels: three stages, nine levels, and the tenth */
+      .ks-stage { font-family: "IM Fell English SC", serif; color: var(--forest-deep); font-size: 1.05rem; letter-spacing: 0.06em; margin: 1.3rem 0 0.55rem; }
+      .ks-stage span { display: block; font-family: "IM Fell English", serif; font-style: italic; letter-spacing: 0; color: var(--ink-soft); font-size: 0.95rem; margin-top: 0.1rem; }
+      .ks-levels { display: grid; gap: 0.6rem; }
+      .ks-level { border: 1px solid #8a6f3c; background: rgba(255,252,240,0.3); padding: 0.7rem 0.85rem; }
+      .ks-level.current { border-color: var(--gold); box-shadow: inset 0 0 0 2px rgba(201,164,74,0.5); background: rgba(255,252,240,0.5); }
+      .ks-lv-top { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+      .ks-lv-num { font-family: "IM Fell English SC", serif; color: var(--gold); font-size: 0.92rem; letter-spacing: 0.08em; flex: none; }
+      .ks-lv-name { font-family: "IM Fell English SC", serif; font-size: 1.14rem; color: var(--ink); flex: 1 1 auto; line-height: 1.25; }
+      .ks-chip { flex: none; font-family: "IM Fell English SC", serif; font-size: 0.8rem; letter-spacing: 0.07em; padding: 0.18rem 0.55rem; border: 1px solid #8a6f3c; color: var(--ink-soft); }
+      .ks-chip.on { background: var(--burgundy); border-color: var(--gold); color: var(--parchment-light); }
+      .ks-lv-parts { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.93rem; margin-top: 0.3rem; line-height: 1.4; }
+      .ks-lv-open { margin-top: 0.55rem; }
+
+      /* Level 1, the template: the seven days, each in four parts */
+      .ks-days { display: grid; gap: 0.6rem; }
+      .ks-day { border: 1px solid #8a6f3c; background: rgba(255,252,240,0.3); padding: 0.7rem 0.85rem; }
+      .ks-day.open { border-color: var(--gold); box-shadow: inset 0 0 0 2px rgba(201,164,74,0.45); }
+      .ks-day-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.45rem; }
+      .ks-day-head b { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 1.08rem; color: var(--burgundy-deep); flex: 1 1 auto; }
+      .ks-part { display: flex; align-items: baseline; gap: 0.7rem; padding: 0.32rem 0; }
+      .ks-part + .ks-part { border-top: 1px dotted rgba(138,111,60,0.35); }
+      .ks-part .ks-pname { flex: none; width: 5.6rem; font-family: "IM Fell English SC", serif; font-size: 0.92rem; color: var(--forest-deep); letter-spacing: 0.03em; }
+
+      /* Memorization, challenges, the reckoning of the level */
+      .ks-rows { display: grid; gap: 0.6rem; }
+      .ks-row { border: 1px solid #8a6f3c; background: rgba(255,252,240,0.3); padding: 0.65rem 0.85rem; }
+      .ks-row .ks-r-top { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+      .ks-row .ks-r-name { font-family: "IM Fell English SC", serif; font-size: 1.05rem; color: var(--ink); flex: 1 1 auto; line-height: 1.3; }
+      .ks-row .ks-r-sub { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.94rem; margin-top: 0.2rem; line-height: 1.4; }
+      .ks-row .progress-frame { margin-top: 0.5rem; }
+      .ks-pass { list-style: none; margin: 0; padding: 0; border: 1px solid #8a6f3c; background: rgba(255,252,240,0.3); }
+      .ks-pass li { display: flex; align-items: baseline; gap: 0.7rem; padding: 0.55rem 0.85rem; font-family: "IM Fell English", serif; font-size: 1rem; line-height: 1.4; }
+      .ks-pass li + li { border-top: 1px dotted rgba(138,111,60,0.4); }
+      .ks-pass li span { flex: 1 1 auto; }
+      .ks-pass li b { font-family: "IM Fell English SC", serif; font-weight: 400; color: var(--burgundy); white-space: nowrap; }
+
+      /* The end-of-level test: the form stands ready, twenty-one rows */
+      .ks-test { display: grid; gap: 0.45rem; }
+      .ks-test-row { display: flex; align-items: center; gap: 0.6rem; }
+      .ks-test-row .ks-tn { flex: none; width: 1.7rem; text-align: right; font-family: "IM Fell English SC", serif; color: var(--burgundy); font-size: 0.98rem; }
+      .ks-test-row .ks-blank { flex: 1 1 auto; border-bottom: 1px dotted rgba(138,111,60,0.65); height: 1px; }
+      .ks-test-row select { flex: none; width: 8.2rem; font-family: "IM Fell English", serif; font-size: 0.95rem; color: var(--ink-soft); background: rgba(255,252,240,0.65); border: 1px solid #8a6f3c; padding: 0.35rem 0.4rem; min-height: 2.4rem; }
+
+      /* Setup choices: the five Pages, the colours, the standard, the horse */
+      .ks-picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+      .ks-slot { appearance: none; border: 1px solid #8a6f3c; background: linear-gradient(180deg, #7d6a4c, #57452c); color: #d9c9a3; padding: 0.45rem 0.2rem 0.3rem; min-height: 4.6rem; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; }
+      .ks-slot svg { width: 78%; max-width: 3.4rem; height: auto; display: block; }
+      .ks-slot[aria-checked="true"] { border-color: var(--gold); box-shadow: inset 0 0 0 2px rgba(201,164,74,0.75); background: linear-gradient(180deg, #5d121e, #3f0c15); color: var(--gold-bright); }
+      @media (hover: hover) { .ks-slot:hover { border-color: var(--gold); } }
+      .ks-choices { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+      .ks-choice { appearance: none; display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid #8a6f3c; background: rgba(255,252,240,0.5); color: var(--ink); font-family: "IM Fell English", serif; font-size: 0.99rem; padding: 0.45rem 0.7rem; min-height: 2.9rem; cursor: pointer; text-align: left; }
+      .ks-choice .ks-dot { flex: none; width: 1.15rem; height: 1.15rem; border-radius: 50%; border: 1px solid rgba(43,32,19,0.55); }
+      .ks-choice .ks-std { flex: none; width: 1.5rem; height: 1.9rem; display: block; }
+      .ks-choice[aria-checked="true"] { background: var(--burgundy); border-color: var(--gold); color: var(--parchment-light); box-shadow: inset 0 0 0 2px rgba(201,164,74,0.55); }
+      @media (hover: hover) { .ks-choice:hover { border-color: var(--gold); } }
+      .ks-name-row { display: flex; gap: 0.5rem; align-items: stretch; }
+      .ks-name-row input { flex: 1 1 auto; min-width: 0; }
+      .ks-name-row .btn { flex: none; }
+      .ks-field-note { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.94rem; line-height: 1.4; margin-top: 0.35rem; }
+      @media (max-width: 480px) {
+        .ks-test-row select { width: 6.9rem; }
+        .ks-part .ks-pname { width: 4.9rem; }
+        .ks-strip { flex-wrap: wrap; }
+      }
+    </style>
   </head>
   <body class="gate-open">
 
@@ -2940,7 +3047,7 @@
           <p>Training in the Armour of Light, through 9 levels &mdash; entered by enlistment, in the King&rsquo;s hall.</p>
         </div>
         <div class="sheet">
-          <div id="joinFormWrap">
+          <div id="joinLetterWrap">
             <div class="letter">
               <p class="letter-head">Welcome to the Scabbard Kingdom Hall.</p>
               <p>You have come to the right place, and you have come at the right time &mdash; because the King is calling, and the battle is already joined.</p>
@@ -2955,14 +3062,20 @@
               <p>Sign your name below, for who you are, and begin.</p>
               <p class="letter-sign">&mdash; The Recruiter of the King, by order of the King</p>
             </div>
+          </div>
+          <div id="joinFormWrap">
             <hr class="double-rule" style="color:#8a6f3c" />
             <div class="join-sign">
               <h3 class="fellsc" style="color:var(--burgundy); font-size:1.25rem; text-align:center;">Sign Thy Name, and Begin</h3>
               <form class="gate-form" id="joinForm" novalidate>
                 <div class="gate-field">
                   <label for="joinName">Thy Name</label>
-                  <input type="text" id="joinName" name="name" autocomplete="name" placeholder="e.g. Thomas Miller" required />
+                  <div class="ks-name-row">
+                    <input type="text" id="joinName" name="name" autocomplete="name" placeholder="e.g. Thomas Miller" required />
+                    <button type="button" class="btn plain" id="joinRandomName">Give Me a Name</button>
+                  </div>
                   <p class="gate-error" id="joinNameErr">Give thy name, that thou mayest be enrolled.</p>
+                  <p class="ks-field-note">Thine own name, or one given thee — ask again till one fits. The name thou signest is the name thou art known by in the Series.</p>
                 </div>
                 <div class="gate-field">
                   <label id="joinPathLabel">Thy Path</label>
@@ -2970,6 +3083,29 @@
                     <button type="button" role="radio" aria-checked="true" data-join-path="male">Page<span>For men &middot; Page &middot; Squire &middot; Knight</span></button>
                     <button type="button" role="radio" aria-checked="false" data-join-path="female">Maid<span>For ladies &middot; Maid &middot; Maiden &middot; Lady</span></button>
                   </div>
+                </div>
+                <div class="gate-field" id="joinPageField">
+                  <label id="joinPageLabel">Choose Thy Page</label>
+                  <div class="ks-picker" id="joinPagePicker" role="radiogroup" aria-labelledby="joinPageLabel"></div>
+                  <p class="ks-field-note">Choose one of the five. The Squire and the Knight he becomes are set by this choice — they are not chosen again. The figures themselves are being drawn; plain silhouettes stand in their places till they are ready.</p>
+                </div>
+                <div class="gate-field" id="joinMaidNote" style="display:none">
+                  <label>The Maid&rsquo;s Look</label>
+                  <p class="ks-field-note" style="margin-top:0">The ladies&rsquo; side comes later — the Maid figures are not yet drawn. Thy name, thy book, thy standard, and thy horse are still thine to choose below.</p>
+                </div>
+                <div class="gate-field">
+                  <label id="joinBookLabel">The Colour of Thy Books</label>
+                  <div class="ks-choices" id="joinBookChoices" role="radiogroup" aria-labelledby="joinBookLabel"></div>
+                </div>
+                <div class="gate-field">
+                  <label id="joinStdLabel">Thy Standard</label>
+                  <div class="ks-choices" id="joinStdChoices" role="radiogroup" aria-labelledby="joinStdLabel"></div>
+                  <p class="ks-field-note">The banner thou wilt carry in full when thou art a Knight — thine from the beginning.</p>
+                </div>
+                <div class="gate-field">
+                  <label id="joinHorseLabel">Thy Horse</label>
+                  <div class="ks-choices" id="joinHorseChoices" role="radiogroup" aria-labelledby="joinHorseLabel"></div>
+                  <p class="ks-field-note">Natural colours only — the horse is thine from the beginning, and grows with thee.</p>
                 </div>
                 <button type="submit" class="btn gate-enter">Enlist in the Kingdom Series &rarr;</button>
                 <p class="gate-note">Thy enlistment is kept on this device only, as thy numbering at the Gate is kept.</p>
@@ -2979,12 +3115,177 @@
           <div id="joinDoneWrap" style="display:none">
             <div class="join-sign">
               <h3 class="fellsc" style="color:var(--burgundy); font-size:1.25rem; text-align:center;">Thou Art Enrolled</h3>
-              <p class="fell" style="font-size:1.08rem; line-height:1.5; margin-top:0.6rem;"><b id="joinDoneName"></b>, thou art enrolled in the Kingdom Series, on the path of a <b id="joinDonePath">Page</b>. Thy standing stands on the Muster Roll, and the Armour, the Quests, Ranks &amp; Seals, and the Trials stand open to thee in the Whole Roll.</p>
-              <div class="seal-row">
-                <a class="btn" href="#armour">The Armour of God</a>
-                <a class="btn plain" href="#ranks">Ranks &amp; Seals</a>
+              <div class="ks-strip" style="margin-top:0.8rem;">
+                <div class="ks-holder h64" id="joinDoneHolder" aria-hidden="true"></div>
+                <div class="ks-who">
+                  <b id="joinDoneName"></b>
+                  <span><b id="joinDonePath" style="display:inline; font-size:1em; color:inherit;">Page</b> of the King &middot; <span id="joinDoneStand">Level 1 — Who You Are</span></span>
+                  <span id="joinDoneGear"></span>
+                </div>
               </div>
-              <p style="margin-top:1rem;"><button type="button" class="trial-quiet" id="joinWithdraw">Withdraw from the Kingdom Series</button></p>
+              <p class="fell" style="font-size:1.08rem; line-height:1.5; margin-top:0.6rem;">Thy Kingdom Profile is set down, and all thy progress in the Series — levels, lessons, quests, memorization, test scores, and challenges — is kept in it, on this device. The Hall of Levels stands open to thee.</p>
+              <div class="seal-row">
+                <a class="btn" href="#series">The Kingdom Series</a>
+                <a class="btn plain" href="#level1">Level 1 — Who You Are</a>
+                <a class="btn plain" href="#profile">Kingdom Profile</a>
+              </div>
+              <p style="margin-top:1rem;"><button type="button" class="trial-quiet" id="joinLetterBtn" aria-expanded="false">Read the Recruiter&rsquo;s Letter Again</button></p>
+              <p style="margin-top:0.4rem;"><button type="button" class="trial-quiet" id="joinWithdraw">Withdraw from the Kingdom Series</button></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ THE KINGDOM SERIES : THE HALL OF LEVELS ============ -->
+      <!-- The Series home, for a knight who has joined: his standing, and
+           the nine levels in their three stages, with Level 10 beyond
+           them. Structure only — the lessons are filled in level by level. -->
+      <section class="plate" id="series">
+        <div class="plate-head">
+          <div class="numeral">THE KINGDOM SERIES</div>
+          <h2>The Kingdom Series</h2>
+          <div class="rule" aria-hidden="true">❦</div>
+          <p>Nine levels through the three stages, and then the fight that does not end till Christ returns.</p>
+        </div>
+        <div class="sheet">
+          <div class="ks-wrap">
+            <div class="ks-strip">
+              <div class="ks-holder h64" id="seriesHolder" aria-hidden="true"></div>
+              <div class="ks-who">
+                <b id="seriesName">—</b>
+                <span id="seriesStand">—</span>
+                <span id="seriesDay">—</span>
+              </div>
+              <a class="btn plain" href="#profile">Kingdom Profile</a>
+            </div>
+            <div id="seriesStages"></div>
+            <div class="ks-stage">Level 10<span>After the ninth level — no test, no end.</span></div>
+            <div class="ks-levels">
+              <div class="ks-level">
+                <div class="ks-lv-top"><span class="ks-lv-num">LEVEL 10</span><span class="ks-lv-name">Continuing the Fight</span><span class="ks-chip">Beyond the Levels</span></div>
+                <p class="ks-lv-parts">Continuing the fight and growing till Christ returns — the Knight does not stop at the ninth level.</p>
+              </div>
+            </div>
+            <div class="ks-note">
+              <p><b>The pace of a level.</b> One lesson a day — the next lesson cannot be begun till the next day. A level may be passed in one week at the fastest. Take longer than one month on a level, and thou goest back a level, and all progress on that level beginneth again from the beginning — no partial credit is kept.</p>
+              <p><b>The test.</b> Each level ends in a test of 21 questions, fill-in-the-blank by choosing the word from a dropdown — 20 of 21 (95%) must be answered rightly to pass, with the level&rsquo;s quests and tasks done.</p>
+              <p><b>Memorization and prayer.</b> Memorization stands in every level. Prayer goes with the Armour and with each battle, as necessary as the armour itself — it is not a seventh piece; it is what the soldier does in the armour (Ephesians 6:18).</p>
+              <p><b>The Armour of Light.</b> The Armour, taken as a whole, is the Armour of Light, from the King. It is learned piece by piece as a Squire, and is not given in full till Knighthood.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LEVEL 1 : PAGE 1 — WHO YOU ARE (THE TEMPLATE) ============ -->
+      <!-- Built from the approved Level 1 as the working template for every
+           level: the introduction, seven day shells of Reading, Teaching,
+           Quest, and Prayer, memorization, ongoing challenges, the reckoning
+           of what must be completed, and the end-of-level test form. The
+           lessons, quests, and questions themselves are not written here —
+           each shell stands empty, ready to be filled. -->
+      <section class="plate" id="level1">
+        <div class="plate-head">
+          <div class="numeral">LEVEL 1 &middot; PAGE 1</div>
+          <h2>Who You Are</h2>
+          <div class="rule" aria-hidden="true">❦</div>
+          <p id="lv1StageLine">Page — mentoring and learning. What thou wert, and what thou art now: rescued, and saved to the King.</p>
+        </div>
+        <div class="sheet">
+          <div class="ks-wrap">
+            <div class="ks-strip">
+              <div class="ks-holder h64" id="lv1Holder" aria-hidden="true"></div>
+              <div class="ks-who">
+                <b id="lv1Name">—</b>
+                <span id="lv1Stand">—</span>
+                <span>Thy Page is seen at his lessons, in the classroom of the Hall.</span>
+              </div>
+              <a class="btn plain" href="#series">All Levels</a>
+            </div>
+            <h3 class="ks-h">The Introduction</h3>
+            <div class="ks-note">
+              <p>Before Day 1, the Recruiter of the King&rsquo;s letter is read — <i>Welcome to the Scabbard Kingdom Hall</i> — and the reader signs his name, for who he is, and begins. The letter stands in the Kingdom Hall, where thou didst sign it.</p>
+              <p style="margin-top:0.5rem;"><a class="btn plain" href="#join">Read the Letter in the Kingdom Hall</a></p>
+            </div>
+            <h3 class="ks-h">The Seven Days</h3>
+            <p class="fell" style="font-style:italic; color:var(--ink-soft); margin-bottom:0.6rem;">One lesson a day, and no more — the next day&rsquo;s lesson cannot be begun till the next day. Each day stands in four parts: Reading, verse by verse; Teaching; Quest; and Prayer.</p>
+            <div class="ks-days" id="lv1Days"></div>
+            <h3 class="ks-h">Memorization</h3>
+            <p class="fell" style="font-style:italic; color:var(--ink-soft); margin-bottom:0.6rem;">Learn these by heart in this level, and keep them — say them every day, until thou knowest them without looking.</p>
+            <div class="ks-rows" id="lv1Mem"></div>
+            <h3 class="ks-h">Ongoing Challenges</h3>
+            <p class="fell" style="font-style:italic; color:var(--ink-soft); margin-bottom:0.6rem;">These are not the seven daily lessons. They run through the level, and beyond it, at thine own pace.</p>
+            <div class="ks-rows" id="lv1Chal"></div>
+            <h3 class="ks-h">What Thou Must Complete to Pass Level 1</h3>
+            <ul class="ks-pass" id="lv1Pass"></ul>
+            <h3 class="ks-h">The End-of-Level Test</h3>
+            <div class="ks-note">
+              <p>Dropdown fill-in-the-blank: each question is a sentence with a blank, answered by choosing the right word. 21 questions — <b>20 of 21 correct (95%) to pass</b>, with the quests done, and not before one week in the level. The questions are set down with the lessons; the form stands ready.</p>
+              <p id="lv1TestState">Not yet taken.</p>
+            </div>
+            <div class="ks-test" id="lv1TestRows"></div>
+            <div class="ks-note">
+              <p><b>Prayer, and the Armour of Light.</b> Prayer stands in every day of this level, and with the armour and each battle to come — as necessary as the armour itself (Ephesians 6:18). A Page learns of the Armour of Light here; he trains with it piece by piece as a Squire, and it is not given in full till Knighthood.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ THE KINGDOM PROFILE ============ -->
+      <!-- A separate profile, like a student account, apart from the core
+           app: it holds the reader's name, his Page, his colours, his
+           standard, his horse — and saves all his progress in the Series.
+           Kept on this device only, as all Scabbard is kept. -->
+      <section class="plate" id="profile">
+        <div class="plate-head">
+          <div class="numeral">THE KINGDOM SERIES</div>
+          <h2>Kingdom Profile</h2>
+          <div class="rule" aria-hidden="true">❦</div>
+          <p>Thy identity in the Kingdom Series — and all thy progress, kept.</p>
+        </div>
+        <div class="sheet">
+          <div class="ks-wrap">
+            <div class="ks-strip">
+              <div class="ks-holder h96" id="profHolder" aria-hidden="true"></div>
+              <div class="ks-who">
+                <b id="profName">—</b>
+                <span id="profStand">—</span>
+                <span id="profSeen">Thy Page is seen doing what thou art doing — at his lessons, at prayer, at his quests.</span>
+              </div>
+            </div>
+            <h3 class="ks-h">Thy Standing</h3>
+            <div class="stat-row" id="profStats"></div>
+            <h3 class="ks-h">Thy Progress, Kept</h3>
+            <ul class="ks-pass" id="profProgress"></ul>
+            <h3 class="ks-h">Thy Name</h3>
+            <div class="gate-field">
+              <div class="ks-name-row">
+                <input type="text" id="profNameInput" autocomplete="name" aria-label="Thy name in the Kingdom Series" />
+                <button type="button" class="btn plain" id="profRandomName">Give Me a Name</button>
+                <button type="button" class="btn" id="profSaveName">Set It Down</button>
+              </div>
+              <p class="ks-field-note" id="profNameMsg" aria-live="polite">The name thou signed in the Kingdom Hall. Change it, and the Hall and the levels know thee by the new name.</p>
+            </div>
+            <div class="gate-field" id="profPageField">
+              <label id="profPageLabel">Thy Page</label>
+              <div class="ks-picker" id="profPagePicker" role="radiogroup" aria-labelledby="profPageLabel"></div>
+              <p class="ks-field-note">The one Page thou chosest at the start. He grows with thee — the same face, older — Squire, then Knight. The figures are being drawn; plain silhouettes stand in their places.</p>
+            </div>
+            <div class="gate-field">
+              <label id="profBookLabel">The Colour of Thy Books</label>
+              <div class="ks-choices" id="profBookChoices" role="radiogroup" aria-labelledby="profBookLabel"></div>
+            </div>
+            <div class="gate-field">
+              <label id="profStdLabel">Thy Standard</label>
+              <div class="ks-choices" id="profStdChoices" role="radiogroup" aria-labelledby="profStdLabel"></div>
+            </div>
+            <div class="gate-field">
+              <label id="profHorseLabel">Thy Horse</label>
+              <div class="ks-choices" id="profHorseChoices" role="radiogroup" aria-labelledby="profHorseLabel"></div>
+              <p class="ks-field-note">Natural colours only. Now and then thou wilt see thy Page in the holder on horseback — a picture of who thou art becoming.</p>
+            </div>
+            <div class="ks-note">
+              <p>Thy Kingdom Profile is kept on this device only — there is no account server, and nothing of it leaves this device. To leave the Series altogether, withdraw in the Kingdom Hall.</p>
+              <p style="margin-top:0.5rem;"><a class="btn plain" href="#join">To the Kingdom Hall</a></p>
             </div>
           </div>
         </div>
@@ -3114,6 +3415,9 @@
         <li><a class="summon-row" href="#forge" data-summon="forge"><span class="num">II</span><span class="what"><b>Forge a Plan</b><span>Fifty plans, thy own books, the Reckoning, Tally &amp; Calendar.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
         <li><a class="summon-row" href="#reading" data-summon="reading"><span class="num">III</span><span class="what"><b>The Reading</b><span>The Scroll, Verse by Verse, Red Letter, Quill.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
         <li class="join-only"><a class="summon-row" href="#join" data-summon="join"><span class="num">&#10020;</span><span class="what"><b>Join the Kingdom Series</b><span>Training in the Armour of Light, through 9 levels.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
+        <li class="series-only"><a class="summon-row" href="#series" data-summon="series"><span class="num">&#10022;</span><span class="what"><b>The Kingdom Series</b><span>The Hall of Levels — nine levels in three stages, and thy standing in them.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
+        <li class="series-only"><a class="summon-row" href="#level1" data-summon="level1"><span class="num">1</span><span class="what"><b>Level 1 — Who You Are</b><span>Page 1: the seven days, the memorization, the challenges, and the test.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
+        <li class="series-only"><a class="summon-row" href="#profile" data-summon="profile"><span class="num">&#10023;</span><span class="what"><b>Kingdom Profile</b><span>Thy Page, thy colours, thy standard, thy horse — and all thy progress, kept.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
         <li class="series-only"><a class="summon-row" href="#armour" data-summon="armour"><span class="num">IV</span><span class="what"><b>The Armour of God</b><span>Ephesians 6, piece by piece, with the study.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
         <li><a class="summon-row" href="#company" data-summon="company"><span class="num">V</span><span class="what"><b>Fellow Soldier</b><span>Answer a summons, take the oath, see thy company.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
         <li class="series-only"><a class="summon-row" href="#quests" data-summon="quests"><span class="num">VI</span><span class="what"><b>Quests</b><span>Know thy enemies, undertake the quests, and read the Chronicles.</span></span><span class="go" aria-hidden="true">&rarr;</span></a></li>
@@ -3422,33 +3726,364 @@
            as the numbering at the Gate is kept (localStorage) — there is no
            account server, and nothing is saved across devices. */
         var KINGDOM_KEY = "scabbard_kingdom_v1";
-        var SERIES_PAGES = ["armour", "quests", "ranks", "trials"];
+        var SERIES_PAGES = ["series", "level1", "profile", "armour", "quests", "ranks", "trials"];
+
+        /* The Series, as it was set: nine levels in three stages, and the
+           tenth beyond them. Titles and order from the approved order of
+           the levels — structure only; no lesson stands written here. */
+        var KS_STAGES = [
+          { work: "Mentoring and learning" },
+          { work: "Strengthening and building" },
+          { work: "Accomplishing" }
+        ];
+        var KS_LEVELS = [
+          { n: 1, title: "Who You Are" },
+          { n: 2, title: "Who the King Is" },
+          { n: 3, title: "The Basic Disciplines" },
+          { n: 4, title: "Who the Enemy Is" },
+          { n: 5, title: "The Armour of Light, Part 1" },
+          { n: 6, title: "The Armour of Light, Part 2" },
+          { n: 7, title: "The Heart of the King" },
+          { n: 8, title: "Fighting the Personal Attacks" },
+          { n: 9, title: "Rescuing Others from Satan" }
+        ];
+        /* Level 1's memorization, from the approved Level 1: the references
+           name the slots; the verses themselves stand in the Reading. */
+        var KS_MEM1 = ["Ephesians 2:8\u20139", "Romans 10:13", "1 John 5:13"];
+        var KS_BOOKS = [
+          { id: "red", name: "Deep Red", colour: "#6d1f24" },
+          { id: "chestnut", name: "Chestnut", colour: "#7a4a21" },
+          { id: "green", name: "Forest Green", colour: "#2f4630" },
+          { id: "black", name: "Black", colour: "#26221e" },
+          { id: "tan", name: "Tan", colour: "#b08d57" }
+        ];
+        var KS_STANDARDS = [
+          { id: "cross-red", name: "The Cross", desc: "gold on red", field: "#6d1f24", mark: "#c9a44a", markKind: "cross" },
+          { id: "cross-white", name: "The Cross", desc: "red on white", field: "#efe6cf", mark: "#8e1f2f", markKind: "cross" },
+          { id: "crown-green", name: "The Crown", desc: "gold on green", field: "#2f4630", mark: "#c9a44a", markKind: "crown" },
+          { id: "sword-black", name: "The Sword", desc: "silver on black", field: "#26221e", mark: "#cfd2cd", markKind: "sword" }
+        ];
+        /* Natural horse colours only — no unnatural colours, by the word given. */
+        var KS_HORSES = [
+          { id: "bay", name: "Bay", colour: "#6e4525" },
+          { id: "black", name: "Black", colour: "#23201d" },
+          { id: "chestnut", name: "Chestnut", colour: "#8a4b23" },
+          { id: "grey", name: "Grey", colour: "#9a958c" },
+          { id: "palomino", name: "Palomino", colour: "#c9a86a" },
+          { id: "dun", name: "Dun", colour: "#a98f66" },
+          { id: "roan", name: "Roan", colour: "#7d6a5c" }
+        ];
+        var KS_NAMES = {
+          male: ["Aldous", "Anselm", "Barnabas", "Caleb", "Edmund", "Elias", "Gideon", "Hugh", "Josiah", "Leofric", "Miles", "Nathaniel", "Osric", "Rowan", "Silas", "Stephen", "Thomas", "Tobias", "Walter", "William"],
+          female: ["Abigail", "Agnes", "Beatrice", "Cecily", "Eleanor", "Esther", "Grace", "Hannah", "Judith", "Lydia", "Margaret", "Martha", "Mercy", "Miriam", "Priscilla", "Ruth", "Sarah", "Tabitha"]
+        };
+        /* A plain silhouette stands in the avatar holder, and in the five
+           Page slots, until the Page figures are drawn and approved. The
+           slots carry no label of any people — the reader picks by looking. */
+        var KS_SILHOUETTE = '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="14.5" r="7.6" fill="currentColor"/><path d="M7 48c0-10.5 7.6-16.5 17-16.5S41 37.5 41 48Z" fill="currentColor"/></svg>';
+        function ksStandardSVG(st) {
+          var mark = "";
+          if (st.markKind === "cross") mark = '<rect x="10.6" y="3.6" width="2.8" height="10.5" fill="' + st.mark + '"/><rect x="6.4" y="7.2" width="11.2" height="2.6" fill="' + st.mark + '"/>';
+          else if (st.markKind === "crown") mark = '<path d="M5.5 14.5 L7 6.8 L10.2 10.6 L12 5.8 L13.8 10.6 L17 6.8 L18.5 14.5 Z" fill="' + st.mark + '"/><rect x="5.5" y="15.4" width="13" height="1.9" fill="' + st.mark + '"/>';
+          else mark = '<rect x="11.1" y="2.6" width="1.8" height="10" fill="' + st.mark + '"/><rect x="8" y="12.6" width="8" height="1.7" fill="' + st.mark + '"/><rect x="11.1" y="14.3" width="1.8" height="3.6" fill="' + st.mark + '"/>';
+          return '<svg class="ks-std" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 1.5 h16 v13.2 c-2.7 1.8-5.3-0.6-8 1.2 c-2.7-1.8-5.3 0.6-8-1.2 Z" fill="' + st.field + '" stroke="rgba(43,32,19,0.5)"/>' + mark + "</svg>";
+        }
+        function ksToday() {
+          var d = new Date(), m = String(d.getMonth() + 1), day = String(d.getDate());
+          return d.getFullYear() + "-" + (m.length < 2 ? "0" + m : m) + "-" + (day.length < 2 ? "0" + day : day);
+        }
+        /* The Kingdom Profile record: the enlistment of the first build
+           (name, path, date) grows the profile and the progress record
+           around it, so no knight already enrolled loses his standing. */
+        function ksNormalize(k) {
+          if (!k || typeof k !== "object") return null;
+          if (!k.profile || typeof k.profile !== "object") k.profile = {};
+          var p = k.profile;
+          if (typeof p.page !== "number") p.page = null;
+          if (!p.book) p.book = "red";
+          if (!p.standard) p.standard = "cross-red";
+          if (!p.horse) p.horse = "bay";
+          if (!k.progress || typeof k.progress !== "object") k.progress = {};
+          var g = k.progress;
+          if (typeof g.currentLevel !== "number" || g.currentLevel < 1 || g.currentLevel > 9) g.currentLevel = 1;
+          if (!g.levelStartedOn) g.levelStartedOn = (k.at || "").slice(0, 10) || ksToday();
+          ["lessons", "quests", "memorization", "testScores", "challenges"].forEach(function (key) {
+            if (!g[key] || typeof g[key] !== "object") g[key] = {};
+          });
+          return k;
+        }
         function readKingdom() {
-          try { var raw = localStorage.getItem(KINGDOM_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+          try { var raw = localStorage.getItem(KINGDOM_KEY); return raw ? ksNormalize(JSON.parse(raw)) : null; } catch (e) { return null; }
         }
         var kingdom = readKingdom();
+        function saveKingdom() {
+          try { if (kingdom) localStorage.setItem(KINGDOM_KEY, JSON.stringify(kingdom)); } catch (e) {}
+        }
+        function ksStageOf(n) { return n <= 3 ? 0 : (n <= 6 ? 1 : 2); }
+        function ksRankNames() { return RANK_PATHS[currentGender === "female" ? "female" : "male"]; }
+        function ksRankForLevel(n) { return ksRankNames()[ksStageOf(n)]; }
+        function ksLevelTitle(n) {
+          for (var i = 0; i < KS_LEVELS.length; i++) if (KS_LEVELS[i].n === n) return KS_LEVELS[i].title;
+          return "";
+        }
+        function ksDayInLevel() {
+          if (!kingdom) return 1;
+          var start = new Date(kingdom.progress.levelStartedOn + "T00:00:00");
+          var now = new Date(); now.setHours(0, 0, 0, 0);
+          var d = Math.floor((now - start) / 86400000) + 1;
+          return d < 1 ? 1 : d;
+        }
+        function ksLessonsDone(level) {
+          if (!kingdom) return 0;
+          var l = kingdom.progress.lessons[String(level)] || {}, c = 0;
+          for (var k in l) if (Object.prototype.hasOwnProperty.call(l, k)) c++;
+          return c;
+        }
+        function ksMemDone(level) {
+          if (!kingdom) return 0;
+          var m = kingdom.progress.memorization[String(level)];
+          if (!Array.isArray(m)) return 0;
+          var c = 0; m.forEach(function (v) { if (v) c++; });
+          return c;
+        }
+        function ksFind(list, id) {
+          for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+          return list[0];
+        }
+        function ksGearLine() {
+          if (!kingdom) return "";
+          var b = ksFind(KS_BOOKS, kingdom.profile.book), h = ksFind(KS_HORSES, kingdom.profile.horse), s = ksFind(KS_STANDARDS, kingdom.profile.standard);
+          return "Books " + b.name.toLowerCase() + " \u00b7 standard " + s.name.toLowerCase() + ", " + s.desc + " \u00b7 horse " + h.name.toLowerCase();
+        }
+        function ksRandomName(gender) {
+          var list = KS_NAMES[gender === "female" ? "female" : "male"];
+          return list[Math.floor(Math.random() * list.length)];
+        }
+        function ksFillHolders() {
+          ["seriesHolder", "lv1Holder", "profHolder", "joinDoneHolder"].forEach(function (id) {
+            var el = $(id); if (el && !el.innerHTML) el.innerHTML = KS_SILHOUETTE;
+          });
+        }
+        /* The choice controls: one builder for the Hall form and the
+           Profile alike, so a choice looks and behaves the same in both. */
+        function ksBuildChoices(el, items, kind, current, onPick) {
+          if (!el) return;
+          el.innerHTML = "";
+          items.forEach(function (it) {
+            var b = document.createElement("button");
+            b.type = "button"; b.setAttribute("role", "radio");
+            b.setAttribute("aria-checked", String(it.id === current));
+            b.className = "ks-choice"; b.dataset.ksId = it.id;
+            if (kind === "standard") b.innerHTML = ksStandardSVG(it) + "<span>" + it.name + "<br><i>" + it.desc + "</i></span>";
+            else b.innerHTML = '<span class="ks-dot" style="background:' + it.colour + '"></span><span>' + it.name + "</span>";
+            b.addEventListener("click", function () { onPick(it.id); });
+            el.appendChild(b);
+          });
+        }
+        function ksMarkChoice(el, id) {
+          if (!el) return;
+          el.querySelectorAll(".ks-choice").forEach(function (b) { b.setAttribute("aria-checked", String(b.dataset.ksId === id)); });
+        }
+        function ksBuildPicker(el, current, onPick) {
+          if (!el) return;
+          el.innerHTML = "";
+          var words = ["first", "second", "third", "fourth", "fifth"];
+          for (var i = 1; i <= 5; i++) {
+            var b = document.createElement("button");
+            b.type = "button"; b.setAttribute("role", "radio");
+            b.setAttribute("aria-checked", String(i === current));
+            b.className = "ks-slot"; b.dataset.ksPage = String(i);
+            b.setAttribute("aria-label", "The " + words[i - 1] + " Page");
+            b.innerHTML = KS_SILHOUETTE;
+            (function (n, btn) { btn.addEventListener("click", function () { onPick(n); }); })(i, b);
+            el.appendChild(b);
+          }
+        }
+        function ksMarkPicker(el, n) {
+          if (!el) return;
+          el.querySelectorAll(".ks-slot").forEach(function (b) { b.setAttribute("aria-checked", String(+b.dataset.ksPage === n)); });
+        }
+
+        /* ---------- The Hall of Levels ---------- */
+        function renderSeriesHome() {
+          var wrap = $("seriesStages"); if (!wrap) return;
+          ksFillHolders();
+          if (!kingdom) { wrap.innerHTML = ""; return; }
+          var g = kingdom.progress, cur = g.currentLevel, ranks = ksRankNames();
+          var nm = $("seriesName"); if (nm) nm.textContent = kingdom.name || "";
+          var st = $("seriesStand"); if (st) st.textContent = ksRankForLevel(cur) + " \u00b7 Level " + cur + " of 9 \u2014 " + ksLevelTitle(cur);
+          var dy = $("seriesDay"); if (dy) dy.textContent = "Day " + ksDayInLevel() + " of 30 in this level \u00b7 " + ksLessonsDone(cur) + " of 7 lessons done";
+          var html = "";
+          KS_STAGES.forEach(function (stage, si) {
+            html += '<div class="ks-stage">' + ranks[si] + " \u2014 Levels " + (si * 3 + 1) + "\u2013" + (si * 3 + 3) + "<span>" + stage.work + ".</span></div>" + '<div class="ks-levels">';
+            KS_LEVELS.forEach(function (lv) {
+              if (ksStageOf(lv.n) !== si) return;
+              var state, chipCls = "";
+              if (lv.n < cur) state = "Passed";
+              else if (lv.n === cur) { state = "Thy Level"; chipCls = " on"; }
+              else state = "Locked";
+              html += '<div class="ks-level' + (lv.n === cur ? " current" : "") + '">'
+                + '<div class="ks-lv-top"><span class="ks-lv-num">LEVEL ' + lv.n + "</span>"
+                + '<span class="ks-lv-name">' + ranks[si] + " " + (lv.n - si * 3) + ": " + lv.title + "</span>"
+                + '<span class="ks-chip' + chipCls + '">' + state + "</span></div>"
+                + '<p class="ks-lv-parts">7 lessons, one a day \u00b7 memorization \u00b7 quests \u00b7 the test of 21'
+                + (lv.n > cur ? " \u00b7 the lessons of this level are in preparation" : "") + "</p>"
+                + (lv.n === cur && lv.n === 1 ? '<p class="ks-lv-open"><a class="btn plain" href="#level1">Open Level 1</a></p>' : "")
+                + "</div>";
+            });
+            html += "</div>";
+          });
+          wrap.innerHTML = html;
+        }
+
+        /* ---------- Level 1 : the working template ---------- */
+        function ksDayState(day, lessons) {
+          if (lessons[String(day)]) return { label: "Done \u00b7 " + lessons[String(day)], cls: " on", open: false };
+          if (day === 1) return { label: "Open \u2014 To-day", cls: " on", open: true };
+          var prev = lessons[String(day - 1)];
+          if (prev) {
+            if (prev < ksToday()) return { label: "Open \u2014 To-day", cls: " on", open: true };
+            return { label: "Opens To-morrow", cls: "", open: false };
+          }
+          return { label: "Locked", cls: "", open: false };
+        }
+        function renderLevel1() {
+          var daysEl = $("lv1Days"); if (!daysEl || !kingdom) return;
+          var g = kingdom.progress, lessons = g.lessons["1"] || {};
+          var nm = $("lv1Name"); if (nm) nm.textContent = kingdom.name || "";
+          var st = $("lv1Stand"); if (st) st.textContent = ksRankForLevel(1) + " \u00b7 Level 1 of 9 \u00b7 Day " + ksDayInLevel() + " of 30 in this level";
+          var parts = ["Reading", "Teaching", "Quest", "Prayer"], html = "";
+          for (var d = 1; d <= 7; d++) {
+            var s = ksDayState(d, lessons);
+            html += '<div class="ks-day' + (s.open ? " open" : "") + '"><div class="ks-day-head"><b>Day ' + d + '</b><span class="ks-chip' + s.cls + '">' + s.label + "</span></div>";
+            parts.forEach(function (p) {
+              html += '<div class="ks-part"><span class="ks-pname">' + p + '</span><span class="ks-shell-line">Not yet set down.</span></div>';
+            });
+            html += "</div>";
+          }
+          daysEl.innerHTML = html;
+          var memEl = $("lv1Mem");
+          if (memEl) {
+            var mem = g.memorization["1"]; if (!Array.isArray(mem)) mem = [];
+            var mh = "";
+            KS_MEM1.forEach(function (ref, i) {
+              var held = !!mem[i];
+              mh += '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">' + ref + '</span><span class="ks-chip' + (held ? " on" : "") + '">' + (held ? "Held by Heart" : "Not Yet Learned") + "</span></div></div>";
+            });
+            memEl.innerHTML = mh;
+          }
+          var chEl = $("lv1Chal");
+          if (chEl) {
+            var john = +(g.challenges.john || 0), service = +(g.challenges.service || 0);
+            var pct = Math.min(100, Math.round(john / 21 * 100));
+            chEl.innerHTML =
+              '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Bible Reading Challenge</span><span class="ks-chip">' + john + ' of 21 chapters</span></div><p class="ks-r-sub">The Gospel of John, one chapter a day, to the end.</p><div class="progress-frame"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>'
+              + '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Simple Quests</span><span class="ks-chip">' + service + ' done</span></div><p class="ks-r-sub">One small service for another servant of the King, every day.</p></div>'
+              + '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Memorization Challenge</span><span class="ks-chip">' + ksMemDone(1) + ' of 3 verses</span></div><p class="ks-r-sub">The three verses of this level, said every day till they are held \u2014 and said again the next week, so they are not lost.</p></div>';
+          }
+          var passEl = $("lv1Pass");
+          if (passEl) {
+            var ts = g.testScores["1"], q = g.quests["1"] || {};
+            passEl.innerHTML =
+              "<li><span>Seven days of daily work \u2014 Reading, Teaching, Quest, and Prayer, each day, in order</span><b>" + ksLessonsDone(1) + " of 7</b></li>"
+              + "<li><span>Memorization \u2014 the three verses of this level, by heart</span><b>" + ksMemDone(1) + " of 3</b></li>"
+              + "<li><span>Quests \u2014 done, honestly; not just read</span><b>" + (+(q.done || 0)) + " done</b></li>"
+              + "<li><span>The end-of-level test \u2014 20 of 21 correct</span><b>" + (ts ? ts.score + " of " + ts.total : "Not taken") + "</b></li>";
+          }
+          var tstate = $("lv1TestState");
+          if (tstate) {
+            var ts2 = g.testScores["1"];
+            tstate.textContent = ts2 ? "Taken \u2014 " + ts2.score + " of " + ts2.total + " correct." : "Not yet taken.";
+          }
+        }
+        /* The test form stands ready: twenty-one rows, each a blank and a
+           dropdown, waiting on the questions that come with the lessons. */
+        (function buildTestRows() {
+          var el = $("lv1TestRows"); if (!el) return;
+          var html = "";
+          for (var i = 1; i <= 21; i++) {
+            html += '<div class="ks-test-row"><span class="ks-tn">' + i + '.</span><span class="ks-blank" aria-hidden="true"></span><select disabled aria-label="Question ' + i + ' answer"><option>\u2014 choose \u2014</option></select></div>';
+          }
+          el.innerHTML = html;
+        })();
+
+        /* ---------- The Kingdom Profile ---------- */
+        function renderProfile() {
+          if (!kingdom) return;
+          ksFillHolders();
+          var g = kingdom.progress, cur = g.currentLevel;
+          var nm = $("profName"); if (nm) nm.textContent = kingdom.name || "";
+          var st = $("profStand"); if (st) st.textContent = ksRankForLevel(cur) + " of the King \u00b7 Level " + cur + " of 9 \u2014 " + ksLevelTitle(cur) + " \u00b7 " + ksGearLine();
+          var totalLessons = 0, totalMem = 0, lv;
+          for (lv = 1; lv <= 9; lv++) { totalLessons += ksLessonsDone(lv); totalMem += ksMemDone(lv); }
+          var stats = $("profStats");
+          if (stats) stats.innerHTML =
+            "<div><b>" + cur + "</b><span>Present Level</span></div>"
+            + "<div><b>" + ksDayInLevel() + "</b><span>Day in This Level</span></div>"
+            + "<div><b>" + totalLessons + "</b><span>Lessons Done</span></div>"
+            + "<div><b>" + totalMem + "</b><span>Verses Held</span></div>";
+          var prog = $("profProgress");
+          if (prog) {
+            var rows = "";
+            KS_LEVELS.forEach(function (l) {
+              var ts = g.testScores[String(l.n)];
+              var state = l.n < cur ? "Passed" : (l.n === cur ? "In hand" : "Locked");
+              rows += "<li><span>Level " + l.n + " \u2014 " + l.title + "</span><b>" + state + (ts ? " \u00b7 test " + ts.score + "/" + ts.total : "") + "</b></li>";
+            });
+            rows += "<li><span>Level 10 \u2014 Continuing the Fight</span><b>Beyond the levels</b></li>";
+            prog.innerHTML = rows;
+          }
+          var ni = $("profNameInput");
+          if (ni && document.activeElement !== ni) ni.value = kingdom.name || "";
+          ksMarkPicker($("profPagePicker"), kingdom.profile.page || 1);
+          ksMarkChoice($("profBookChoices"), kingdom.profile.book);
+          ksMarkChoice($("profStdChoices"), kingdom.profile.standard);
+          ksMarkChoice($("profHorseChoices"), kingdom.profile.horse);
+          var pf = $("profPageField"); if (pf) pf.style.display = kingdom.path === "female" ? "none" : "";
+        }
+
+        /* ---------- Enlistment: the letter read, the name signed, the
+           profile set down — then the Series stands in the app ---------- */
         var joinPath = "male";
+        var setupPage = 1, setupBook = "red", setupStandard = "cross-red", setupHorse = "bay";
+        var letterOpen = false;
         function chooseJoinPath(p) {
           joinPath = p === "female" ? "female" : "male";
           document.querySelectorAll("[data-join-path]").forEach(function (b) {
             b.setAttribute("aria-checked", String(b.getAttribute("data-join-path") === joinPath));
           });
+          var pf = $("joinPageField"), mn = $("joinMaidNote");
+          if (pf) pf.style.display = joinPath === "male" ? "" : "none";
+          if (mn) mn.style.display = joinPath === "female" ? "" : "none";
         }
         function applySeriesGate() {
           document.body.classList.toggle("series-joined", !!kingdom);
-          var formWrap = $("joinFormWrap"), doneWrap = $("joinDoneWrap");
+          var formWrap = $("joinFormWrap"), doneWrap = $("joinDoneWrap"), letterWrap = $("joinLetterWrap");
           if (formWrap) formWrap.style.display = kingdom ? "none" : "";
+          if (letterWrap) letterWrap.style.display = (!kingdom || letterOpen) ? "" : "none";
+          var lb = $("joinLetterBtn"); if (lb) lb.setAttribute("aria-expanded", String(letterOpen));
           if (doneWrap) {
             doneWrap.style.display = kingdom ? "" : "none";
             if (kingdom) {
               var dn = $("joinDoneName"); if (dn) dn.textContent = kingdom.name || "";
-              var dp = $("joinDonePath"); if (dp) dp.textContent = kingdom.path === "female" ? "Maid" : "Page";
+              var dp = $("joinDonePath"); if (dp) dp.textContent = ksRankForLevel(kingdom.progress.currentLevel);
+              var ds = $("joinDoneStand"); if (ds) ds.textContent = "Level " + kingdom.progress.currentLevel + " \u2014 " + ksLevelTitle(kingdom.progress.currentLevel) + " \u00b7 Day " + ksDayInLevel() + " of 30 in this level";
+              var dg = $("joinDoneGear"); if (dg) dg.textContent = ksGearLine();
             }
           }
+          if (kingdom) { renderSeriesHome(); renderLevel1(); renderProfile(); }
         }
         document.querySelectorAll("[data-join-path]").forEach(function (b) {
           b.addEventListener("click", function () { chooseJoinPath(b.getAttribute("data-join-path")); });
         });
+        ksBuildPicker($("joinPagePicker"), setupPage, function (n) { setupPage = n; ksMarkPicker($("joinPagePicker"), n); });
+        ksBuildChoices($("joinBookChoices"), KS_BOOKS, "book", setupBook, function (id) { setupBook = id; ksMarkChoice($("joinBookChoices"), id); });
+        ksBuildChoices($("joinStdChoices"), KS_STANDARDS, "standard", setupStandard, function (id) { setupStandard = id; ksMarkChoice($("joinStdChoices"), id); });
+        ksBuildChoices($("joinHorseChoices"), KS_HORSES, "horse", setupHorse, function (id) { setupHorse = id; ksMarkChoice($("joinHorseChoices"), id); });
+        ksBuildPicker($("profPagePicker"), 1, function (n) { if (!kingdom) return; kingdom.profile.page = n; saveKingdom(); ksMarkPicker($("profPagePicker"), n); });
+        ksBuildChoices($("profBookChoices"), KS_BOOKS, "book", "red", function (id) { if (!kingdom) return; kingdom.profile.book = id; saveKingdom(); renderProfile(); });
+        ksBuildChoices($("profStdChoices"), KS_STANDARDS, "standard", "cross-red", function (id) { if (!kingdom) return; kingdom.profile.standard = id; saveKingdom(); renderProfile(); });
+        ksBuildChoices($("profHorseChoices"), KS_HORSES, "horse", "bay", function (id) { if (!kingdom) return; kingdom.profile.horse = id; saveKingdom(); renderProfile(); });
         (function initJoin() {
           var en = readEnlistment();
           var jn = $("joinName");
@@ -3459,6 +4094,34 @@
             var e = $("joinNameErr"); if (e) e.classList.remove("show");
           });
         })();
+        var joinRandom = $("joinRandomName");
+        if (joinRandom) joinRandom.addEventListener("click", function () {
+          var inp = $("joinName"); if (!inp) return;
+          inp.value = ksRandomName(joinPath);
+          inp.removeAttribute("aria-invalid");
+          var e = $("joinNameErr"); if (e) e.classList.remove("show");
+        });
+        var joinLetterBtn = $("joinLetterBtn");
+        if (joinLetterBtn) joinLetterBtn.addEventListener("click", function () {
+          letterOpen = !letterOpen;
+          var lw = $("joinLetterWrap"); if (lw) lw.style.display = letterOpen ? "" : "none";
+          joinLetterBtn.setAttribute("aria-expanded", String(letterOpen));
+        });
+        var profRandom = $("profRandomName");
+        if (profRandom) profRandom.addEventListener("click", function () {
+          var inp = $("profNameInput"); if (inp) inp.value = ksRandomName(kingdom ? kingdom.path : "male");
+        });
+        var profSave = $("profSaveName");
+        if (profSave) profSave.addEventListener("click", function () {
+          if (!kingdom) return;
+          var v = (($("profNameInput") || {}).value || "").trim();
+          var msg = $("profNameMsg");
+          if (v.length < 2) { if (msg) msg.textContent = "Give a name of at least two letters, that it may be set down."; return; }
+          kingdom.name = v;
+          saveKingdom();
+          applySeriesGate();
+          if (msg) msg.textContent = "Set down. Thou art known in the Series as " + v + ".";
+        });
         var joinForm = $("joinForm");
         if (joinForm) joinForm.addEventListener("submit", function (e) {
           e.preventDefault();
@@ -3468,19 +4131,35 @@
           nameEl.setAttribute("aria-invalid", String(!nameOk));
           $("joinNameErr").classList.toggle("show", !nameOk);
           if (!nameOk) { nameEl.focus(); return; }
-          kingdom = { name: name, path: joinPath, at: new Date().toISOString() };
-          try { localStorage.setItem(KINGDOM_KEY, JSON.stringify(kingdom)); } catch (err) {}
+          /* Enlistment creates the Separate Kingdom Profile: the name, the
+             path, the Page, the book colour, the standard, and the horse —
+             and the progress record that will hold the levels, lessons,
+             quests, memorization, test scores, and challenges. All of it
+             kept on this device only; there is no account server. */
+          kingdom = {
+            name: name, path: joinPath, at: new Date().toISOString(),
+            profile: { page: joinPath === "male" ? setupPage : null, book: setupBook, standard: setupStandard, horse: setupHorse },
+            progress: { currentLevel: 1, levelStartedOn: ksToday(), lessons: {}, quests: {}, memorization: {}, testScores: {}, challenges: {} }
+          };
+          saveKingdom();
           setRankGender(joinPath);
+          letterOpen = false;
           applySeriesGate();
-          if (location.hash !== "#armour") { location.hash = "armour"; }
-          else if (typeof showPage === "function") { showPage("armour", false); }
+          if (location.hash !== "#series") { location.hash = "series"; }
+          else if (typeof showPage === "function") { showPage("series", false); }
         });
         var joinWithdraw = $("joinWithdraw");
         if (joinWithdraw) joinWithdraw.addEventListener("click", function () {
           kingdom = null;
           try { localStorage.removeItem(KINGDOM_KEY); } catch (e) {}
+          letterOpen = false;
           applySeriesGate();
           if (location.hash !== "#roll") { location.hash = "roll"; }
+        });
+        /* A change of rank names in Settings renames the stages too — the
+           Series pages are drawn again whenever the knight travels. */
+        window.addEventListener("hashchange", function () {
+          if (kingdom) { renderSeriesHome(); renderLevel1(); renderProfile(); }
         });
         applySeriesGate();
 
@@ -4730,8 +5409,8 @@
           }
         });
         /* ---------- Pages : each part is its own page, shown alone for focus ---------- */
-        var pageIds = ["roll", "forge", "reading", "armour", "company", "quests", "ranks", "trials", "settings", "join"];
-        var pageNames = { roll: "The Muster Roll", forge: "Forge a Plan", reading: "The Reading", armour: "The Armour of God", company: "Fellow Soldier", quests: "Quests", ranks: "Ranks & Seals", trials: "Trials", settings: "Settings", join: "The Kingdom Hall" };
+        var pageIds = ["roll", "forge", "reading", "series", "level1", "profile", "armour", "company", "quests", "ranks", "trials", "settings", "join"];
+        var pageNames = { roll: "The Muster Roll", forge: "Forge a Plan", reading: "The Reading", series: "The Kingdom Series", level1: "Level 1 \u2014 Who You Are", profile: "Kingdom Profile", armour: "The Armour of God", company: "Fellow Soldier", quests: "Quests", ranks: "Ranks & Seals", trials: "Trials", settings: "Settings", join: "The Kingdom Hall" };
         var currentPage = "";
         function markCurrent(id) {
           document.querySelectorAll("[data-dock]").forEach(function (a) {
