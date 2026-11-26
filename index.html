@@ -3784,24 +3784,36 @@
           var sp = $("splash"), vid = $("splashReel");
           if (!sp) { document.body.classList.remove("splash-open"); return; }
           var lifted = false;
+          /* The opening stands a full three seconds on every open, new or
+             returning. Nothing lifts it sooner — not a tap, not the reel
+             ending early, not the reel failing: if the film cannot play,
+             the still mark stands in its place for the same three seconds.
+             Only then does the opening fade into the hall. */
+          var HOLD_MS = 3000;
+          var shownAt = Date.now();
           function lift() {
             if (lifted) return; lifted = true;
             document.body.classList.remove("splash-open");
             sp.classList.add("lift");
             setTimeout(function () { sp.style.display = "none"; if (vid) { try { vid.pause(); } catch (e) {} } }, 700);
           }
-          sp.addEventListener("click", lift);
+          function requestLift() {
+            var left = HOLD_MS - (Date.now() - shownAt);
+            if (left <= 0) { lift(); return; }
+            setTimeout(lift, left);
+          }
+          sp.addEventListener("click", requestLift);
           if (prefersReducedMotion) {
             if (vid) { vid.removeAttribute("autoplay"); try { vid.pause(); } catch (e) {} vid.style.display = "none"; }
-            setTimeout(lift, 900);
+            requestLift();
             return;
           }
           if (vid) {
-            vid.addEventListener("ended", lift);
-            vid.addEventListener("error", function () { vid.style.display = "none"; setTimeout(lift, 1400); });
+            vid.addEventListener("ended", requestLift);
+            vid.addEventListener("error", function () { vid.style.display = "none"; requestLift(); });
             var p = null;
-            try { p = vid.play(); } catch (e) { setTimeout(lift, 1400); }
-            if (p && typeof p.catch === "function") { p.catch(function () { if (!lifted) { vid.style.display = "none"; setTimeout(lift, 1400); } }); }
+            try { p = vid.play(); } catch (e) { requestLift(); }
+            if (p && typeof p.catch === "function") { p.catch(function () { if (!lifted) { vid.style.display = "none"; requestLift(); } }); }
           }
           /* However the film fares, the opening never stands shut for good */
           setTimeout(lift, 7000);
