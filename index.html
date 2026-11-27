@@ -1611,7 +1611,7 @@
       .vb-msg { margin-top: 0.35rem; }
       .vb-msg:empty { display: none; }
       @media (max-width: 700px) {
-        .reading-controls .verse-mode-badge { font-size: 0.8rem; padding: 0.28rem 0.5rem; }
+        .reading-controls .verse-mode-badge { font-size: 0.8rem; padding: 0.28rem 0.5rem; white-space: normal; overflow: visible; text-overflow: clip; text-align: center; line-height: 1.2; }
         .reading-controls .btn { font-size: 0.84rem; padding: 0.28rem 0.55rem; }
         #reading .reading-scroll { padding: 0.6rem 0.65rem; }
       }
@@ -2196,6 +2196,9 @@
       .ks-row .ks-r-top { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
       .ks-row .ks-r-name { font-family: "IM Fell English SC", serif; font-size: 1.05rem; color: var(--ink); flex: 1 1 auto; line-height: 1.3; }
       .ks-row .ks-r-sub { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-soft); font-size: 0.94rem; margin-top: 0.2rem; line-height: 1.4; }
+      .ks-mark { margin-top: 0.55rem; min-height: 2.3rem; padding: 0.32rem 0.85rem; font-size: 0.92rem; }
+      .ks-act-row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 0.55rem; }
+      .ks-act-row .ks-mark { margin-top: 0; }
       .ks-row .progress-frame { margin-top: 0.5rem; }
       .ks-pass { list-style: none; margin: 0; padding: 0; border: 1px solid #8a6f3c; background: rgba(255,252,240,0.3); }
       .ks-pass li { display: flex; align-items: baseline; gap: 0.7rem; padding: 0.55rem 0.85rem; font-family: "IM Fell English", serif; font-size: 1rem; line-height: 1.4; }
@@ -4502,7 +4505,8 @@
             var mh = "";
             KS_MEM1.forEach(function (ref, i) {
               var held = !!mem[i];
-              mh += '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">' + ref + '</span><span class="ks-chip' + (held ? " on" : "") + '">' + (held ? "Held by Heart" : "Not Yet Learned") + "</span></div></div>";
+              mh += '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">' + ref + '</span><span class="ks-chip' + (held ? " on" : "") + '">' + (held ? "Held by Heart" : "Not Yet Learned") + '</span></div>'
+                + '<button type="button" class="btn plain ks-mark" data-mem-toggle="' + i + '" aria-pressed="' + held + '">' + (held ? "Undo \u2014 Not Yet Held" : "Mark It Held by Heart") + "</button></div>";
             });
             memEl.innerHTML = mh;
           }
@@ -4511,8 +4515,10 @@
             var john = +(g.challenges.john || 0), service = +(g.challenges.service || 0);
             var pct = Math.min(100, Math.round(john / 21 * 100));
             chEl.innerHTML =
-              '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Bible Reading Challenge</span><span class="ks-chip">' + john + ' of 21 chapters</span></div><p class="ks-r-sub">The Gospel of John, one chapter a day, to the end.</p><div class="progress-frame"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>'
-              + '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Simple Quests</span><span class="ks-chip">' + service + ' done</span></div><p class="ks-r-sub">One small service for another servant of the King, every day.</p></div>'
+              '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Bible Reading Challenge</span><span class="ks-chip">' + john + ' of 21 chapters</span></div><p class="ks-r-sub">The Gospel of John, one chapter a day, to the end.</p><div class="progress-frame"><div class="progress-fill" style="width:' + pct + '%"></div></div>'
+              + '<div class="ks-act-row">' + (john < 21 ? '<button type="button" class="btn plain ks-mark" data-chal="john-add">Mark a Chapter Read</button>' : '<span class="ks-chip on">All 21 Chapters Read</span>') + (john > 0 ? '<button type="button" class="trial-quiet" data-chal="john-sub">Take one back</button>' : "") + "</div></div>"
+              + '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Simple Quests</span><span class="ks-chip">' + service + ' done</span></div><p class="ks-r-sub">One small service for another servant of the King, every day.</p>'
+              + '<div class="ks-act-row"><button type="button" class="btn plain ks-mark" data-chal="service-add">Mark a Day\u2019s Service Done</button>' + (service > 0 ? '<button type="button" class="trial-quiet" data-chal="service-sub">Take one back</button>' : "") + "</div></div>"
               + '<div class="ks-row"><div class="ks-r-top"><span class="ks-r-name">Memorization Challenge</span><span class="ks-chip">' + ksMemDone(1) + ' of 3 verses</span></div><p class="ks-r-sub">The three verses of this level, said every day till they are held \u2014 and said again the next week, so they are not lost.</p></div>';
           }
           var passEl = $("lv1Pass");
@@ -4539,6 +4545,39 @@
             html += '<div class="ks-test-row"><span class="ks-tn">' + i + '.</span><span class="ks-blank" aria-hidden="true"></span><select disabled aria-label="Question ' + i + ' answer"><option>\u2014 choose \u2014</option></select></div>';
           }
           el.innerHTML = html;
+        })();
+
+        /* Level 1 keeping: a verse is marked held by heart, and the two
+           ongoing challenges are counted, by the knight's own word — the
+           same honest self-keeping as the Quests and the Trials. The rows
+           are redrawn by renderLevel1, so the listening stands on the
+           holders, which are never redrawn. */
+        (function wireLevel1Keeping() {
+          var memEl = $("lv1Mem");
+          if (memEl) memEl.addEventListener("click", function (e) {
+            var b = e.target && e.target.closest ? e.target.closest("[data-mem-toggle]") : null;
+            if (!b || !kingdom) return;
+            var i = +b.getAttribute("data-mem-toggle");
+            var g = kingdom.progress;
+            if (!Array.isArray(g.memorization["1"])) g.memorization["1"] = [];
+            g.memorization["1"][i] = !g.memorization["1"][i];
+            saveKingdom();
+            renderLevel1();
+            renderProfile();
+          });
+          var chEl = $("lv1Chal");
+          if (chEl) chEl.addEventListener("click", function (e) {
+            var b = e.target && e.target.closest ? e.target.closest("[data-chal]") : null;
+            if (!b || !kingdom) return;
+            var c = kingdom.progress.challenges, act = b.getAttribute("data-chal");
+            if (act === "john-add") c.john = Math.min(21, (+(c.john || 0)) + 1);
+            else if (act === "john-sub") c.john = Math.max(0, (+(c.john || 0)) - 1);
+            else if (act === "service-add") c.service = (+(c.service || 0)) + 1;
+            else if (act === "service-sub") c.service = Math.max(0, (+(c.service || 0)) - 1);
+            else return;
+            saveKingdom();
+            renderLevel1();
+          });
         })();
 
         /* ---------- The Kingdom Profile ---------- */
@@ -6414,11 +6453,16 @@
             var smsg = document.createElement("span"); smsg.className = "form-msg"; smsg.setAttribute("aria-live", "polite");
             shareBtn.addEventListener("click", function () { shareJournalNote(e, smsg); });
             acts.appendChild(viewBtn); acts.appendChild(editBtn); acts.appendChild(shareBtn);
-            if (e.src === "user") {
-              var delBtn = mkBtn("Remove", "plain");
-              delBtn.addEventListener("click", function () { state.userNotes.splice(e.idx, 1); saveState(); renderNotes(); });
-              acts.appendChild(delBtn);
-            }
+            var delBtn = mkBtn("Remove", "plain");
+            delBtn.addEventListener("click", function () {
+              if (e.src === "user") state.userNotes.splice(e.idx, 1);
+              else if (e.src === "day") { if (state.notes) delete state.notes[e.key]; if (typeof loadNoteForToday === "function") loadNoteForToday(); }
+              else if (e.src === "armour") { if (state.armourNotes) delete state.armourNotes[e.key]; var sta = document.querySelector('.study-area[data-study="' + e.key + '"]'); if (sta) sta.value = ""; }
+              if (journalEditing === e.id) journalEditing = null;
+              delete journalOpen[e.id];
+              saveState(); renderNotes();
+            });
+            acts.appendChild(delBtn);
             acts.appendChild(smsg);
             card.appendChild(acts);
             if (journalEditing === e.id) {
@@ -6907,12 +6951,14 @@
         carousel.addEventListener("focusin", function () { held = true; });
         carousel.addEventListener("focusout", function () { held = false; });
         var downX = null;
-        carousel.addEventListener("pointerdown", function (e) { downX = e.clientX; });
+        carousel.addEventListener("pointerdown", function (e) { downX = e.clientX; held = true; });
         carousel.addEventListener("pointerup", function (e) {
+          held = false;
           if (downX === null) return;
           var dx = e.clientX - downX; downX = null;
           if (Math.abs(dx) > 42) { step(dx < 0 ? 1 : -1); restart(); }
         });
+        carousel.addEventListener("pointercancel", function () { downX = null; held = false; });
         carousel.addEventListener("keydown", function (e) {
           if (e.key === "ArrowLeft") { step(-1); restart(); }
           if (e.key === "ArrowRight") { step(1); restart(); }
